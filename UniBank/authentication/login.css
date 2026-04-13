@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+.logo {
+    width: 120px;
+    margin-left: 30px;
+    border-radius: 30px;
+    padding: 5px;
+    background-color: white;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.menu {
+    width: 100%;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+}
+
+.nbcontainer {
+    width: 100%;
+    display: flex;
+    background-color: #1b2a5e;
+    padding: 5px;
+    flex-direction: row;
+}
