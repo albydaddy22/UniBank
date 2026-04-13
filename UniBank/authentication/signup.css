@@ -186,8 +186,8 @@ label {
 
 .loginheader p {
     font-size: 14px;
-    font-weight: 500;
-    color: #797979;
+    font-weight: 400;
+    color: #5a5a5a;
     margin: 0px;
 }
 
@@ -208,20 +208,4 @@ label {
 .loginbtn:hover {
     background-color: #2d3f80;
     border-radius: 15px;
-}
-
-.donthaveaccount {
-    font-size: 14px;
-    font-weight: 500;
-    color: #5a5a5a;
-}
-
-.donthaveaccount a {
-    color: #f0b429;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.donthaveaccount a:hover {
-    text-decoration: underline;
 }
