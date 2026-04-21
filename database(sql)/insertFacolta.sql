@@ -1,4 +1,4 @@
-INSERT INTO Facolta (nome) VALUES
+INSERT INTO facolta (nome) VALUES
 ('Antropologia culturale ed etnologia (LM-1)'),
 ('Archeologia (LM-2)'),
 ('Architettura del paesaggio (LM-3)'),

@@ -33,7 +33,7 @@ if(!empty($errors)){
 
 $connection = db_connect();
 
-$query = 'SELECT id_utente, username, password, ruolo FROM Utenti WHERE email = ? LIMIT 1';
+$query = 'SELECT id_utente, username, password, ruolo FROM utenti WHERE email = ? LIMIT 1';
 $stmt = mysqli_prepare($connection, $query);
 if(!$stmt){
     die('Errore nella preparazione della query: ' . mysqli_error($connection));

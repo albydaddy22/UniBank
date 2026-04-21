@@ -1,4 +1,4 @@
-INSERT INTO Universita (nome, citta_sede) VALUES
+INSERT INTO universita (nome, citta_sede) VALUES
 ('Universita politecnica delle Marche', 'Ancona'),
 ('Università degli Studi della Valle d\'Aosta', 'Aosta'),
 ('Università degli Studi di Bari', 'Bari'),

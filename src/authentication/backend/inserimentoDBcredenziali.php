@@ -53,7 +53,7 @@ if (!empty($errors)){
 
 $connection = db_connect();
 
-$query = 'SELECT id_utente FROM Utenti WHERE username = ? OR email = ?';
+$query = 'SELECT id_utente FROM utenti WHERE username = ? OR email = ?';
 $stmt = mysqli_prepare($connection, $query);
 if(!$stmt){
     die('Errore nella preparazione della query: ' . mysqli_error($connection));
@@ -73,7 +73,7 @@ mysqli_stmt_close($stmt);
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 $ruolo = 0;
 
-$inserimentoQuery = 'INSERT INTO Utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES (?, ?, ?, ?, ?, ?)';
+$inserimentoQuery = 'INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES (?, ?, ?, ?, ?, ?)';
 $insertStmt = mysqli_prepare($connection, $inserimentoQuery);
 if(!$insertStmt){
     die('Errore nella preparazione della query di inserimento: ' . mysqli_error($connection));
