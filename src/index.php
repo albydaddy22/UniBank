@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if($_SESSION['isInstalled'] === false || $_SESSION['isInstalled'] === null) {
+    header('location: ../install/install.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +13,7 @@
     <link rel="icon" href="../assets/logowhitebg.png">
     <title>UniBank - HomePage</title>
     <link rel="stylesheet" href="index.css?=<?php echo time();?>">
-    <link rel="stylesheet" href="variables.css">
+    <link rel="stylesheet" href="variables.css?=<?php echo time();?>">
 </head>
 <body>
     <header class="navbar">

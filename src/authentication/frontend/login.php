@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniBank - Login</title>
     <link rel="stylesheet" href="login.css?=<?php echo time();?>">
-    <link rel="stylesheet" href="../../variables.css">
+    <link rel="stylesheet" href="../../variables.css?=<?php echo time();?>">
 </head>
 <body>
     <div class="maincontainer">

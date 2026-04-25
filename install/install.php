@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if($_SERVER['REQUEST_METHOD'] !== 'POST'){
     header('Location: install.html');
     exit;
@@ -553,5 +555,6 @@ if(file_put_contents(__DIR__ . '/../config.php', $configContent) === false){
 
 mysqli_close($conn);
 #unlink(__FILE__);
-header('Location: ../src/authentication/frontend/login.php');
+$_SESSION['isInstalled'] = true;
+header('Location: ../src/index.php');
 exit;
