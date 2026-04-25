@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniBank - Registrati</title>
-    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="signup.css?=v2">
 </head>
 <body>
     <div class="maincontainer">
@@ -16,7 +16,7 @@
                 <div class="menu">
                     <ul>
                         <li>
-                            <a href="../../index.html">Home</a>
+                            <a href="../../index.php">Home</a>
                         </li>
                     </ul>
                 </div>
@@ -106,7 +106,7 @@
                             <a href="signup.php">Registrazione</a>
                         </li>
                         <li>
-                            <a href="../../index.html">Home</a>
+                            <a href="../../index.php">Home</a>
                         </li>
                         <li>
                             <a href="../../../install/install.html">Installazione</a>

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniBank - Login</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="login.css?=<?php echo time();?>">
+    <link rel="stylesheet" href="../../variables.css">
 </head>
 <body>
     <div class="maincontainer">
@@ -16,7 +17,7 @@
             <div class="menu">
                 <ul>
                     <li>
-                        <a href="../../index.html">Home</a>
+                        <a href="../../index.php">Home</a>
                     </li>
                 </ul>
             </div>
@@ -58,7 +59,7 @@
                             <a href="signup.php">Registrazione</a>
                         </li>
                         <li>
-                            <a href="../../index.html">Home</a>
+                            <a href="../../index.php">Home</a>
                         </li>
                         <li>
                             <a href="../../../install/install.html">Installazione</a>
