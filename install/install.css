@@ -275,8 +275,9 @@ footer ul li a:hover {
 
 .contactbtn {
     padding: 10px 30px;
-    border-radius: 10px;
-    border: 2px solid #f0b429;
+    border-radius: 5px;
+    border: 1px solid var(--color-yellow-primary);
+    font-weight: 600;
     background-color: transparent;
     cursor: pointer;
     color: #f0b429;
@@ -291,7 +292,6 @@ footer ul li a:hover {
 .contactbtn:hover {
     background-color: #f0b429;
     color: #1b2a5e;
-    font-weight: 500;
 }
 
 .copyright {

@@ -38,16 +38,91 @@
                     <h1>Il <span>mercato</span> del sapere universitario</h1>
                     <p>Condividi le tue dispense e guadagna UniToken. Acquista materiali di qualità dai tuoi colleghi universitari.</p>
                     <div class="btnbox">
-                        
+                        <button class="startbtn">Inizia Gratis</button>
+                        <button class="sfogliabtn">Sfoglia dispense</button>
                     </div>
                 </div>
                 <div class="headerdispense">
-
+                    <div class="hddispensabox">
+                        <span class="hdnomedispensa" >Dispensa 1</span>
+                        <span class="hdprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                    </div>
+                    <div class="hddispensabox">
+                        <span class="hdnomedispensa" >Dispensa 2</span>
+                        <span class="hdprezzodispensa">8 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                    </div>
+                    <div class="hddispensabox">
+                        <span class="hdnomedispensa" >Dispensa 3</span>
+                        <span class="hdprezzodispensa">15 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="hero">
-
+            <div class="herocontainer">
+                <div class="dispenserecenti">
+                    <h2>Dispense Recenti</h2>
+                    <a href="" class="veditutte">Vedi tutte →</a>
+                </div>
+                <div class="herodispense">
+                    <div class="hrdispensabox">
+                        <div class="dbtextbox">
+                            <img class="dbdocument" src="../assets/document.png" alt="">
+                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
+                            <p class="dbcorso">Corso</p>
+                            <p class="dbuniversita">Università</p>
+                            <p class="dbfacolta">Facoltà</p>
+                            <p class="dbuser">di User</p>
+                        </div>
+                        <div class="dbbuyfield">
+                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                            <button class="buybtn">Compra</button>
+                        </div>
+                    </div>
+                    <div class="hrdispensabox">
+                        <div class="dbtextbox">
+                            <img class="dbdocument" src="../assets/document.png" alt="">
+                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
+                            <p class="dbcorso">Corso</p>
+                            <p class="dbuniversita">Università</p>
+                            <p class="dbfacolta">Facoltà</p>
+                            <p class="dbuser">di User</p>
+                        </div>
+                        <div class="dbbuyfield">
+                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                            <button class="buybtn">Compra</button>
+                        </div>
+                    </div>
+                    <div class="hrdispensabox">
+                        <div class="dbtextbox">
+                            <img class="dbdocument" src="../assets/document.png" alt="">
+                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
+                            <p class="dbcorso">Corso</p>
+                            <p class="dbuniversita">Università</p>
+                            <p class="dbfacolta">Facoltà</p>
+                            <p class="dbuser">di User</p>
+                        </div>
+                        <div class="dbbuyfield">
+                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                            <button class="buybtn">Compra</button>
+                        </div>
+                    </div>
+                    <div class="hrdispensabox">
+                        <div class="dbtextbox">
+                            <img class="dbdocument" src="../assets/document.png" alt="">
+                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
+                            <p class="dbcorso">Corso</p>
+                            <p class="dbuniversita">Università</p>
+                            <p class="dbfacolta">Facoltà</p>
+                            <p class="dbuser">di User</p>
+                        </div>
+                        <div class="dbbuyfield">
+                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
+                            <button class="buybtn">Compra</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <footer>
@@ -83,7 +158,23 @@
                 <a href="#"><button class="contactbtn">Contattaci</button></a>
             </div>
         </div>
-        <p class="copyright">© 2026 UniBank. All rights reserved.</p>
+        <p class="copyright">© 2026 UniBank™. All rights reserved.</p>
     </footer>
 </body>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.nbcontainer');
+    function ombraNavbar() {
+        if (window.scrollY === 0) {
+            navbar.classList.add('no-shadow');
+        } else {
+            navbar.classList.remove('no-shadow');
+        }
+    }
+    ombraNavbar();
+    window.addEventListener('scroll', ombraNavbar);
+});
+</script>
 </html>

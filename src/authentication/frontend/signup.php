@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniBank - Registrati</title>
-    <link rel="stylesheet" href="signup.css?=v2">
+    <link rel="stylesheet" href="signup.css?=<?php echo time();?>">
+    <link rel="stylesheet" href="../../variables.css">
 </head>
 <body>
     <div class="maincontainer">
@@ -44,10 +45,12 @@
                         <div class="inputbox">
                             <label for="password">Password</label>
                             <input type="password" name="password" placeholder="●●●●●●●●●" required>
+                            <button type="button" class="togglepassword"><img src="../../../assets/showpw.png" alt="Show password"></button>
                         </div>
                         <div class="inputbox">
                             <label for="confermapassword">Conferma Password</label>
                             <input type="password" name="confermapassword" placeholder="●●●●●●●●●" required>
+                            <button type="button" class="togglepassword"><img src="../../../assets/showpw.png" alt="Show password"></button>
                         </div>
                         <div class="inputbox fullwidth">
                             <label for="universita">Università</label>
@@ -127,9 +130,29 @@
                     <a href="#"><button class="contactbtn">Contattaci</button></a>
                 </div>
             </div>
-            <p class="copyright">© 2026 UniBank. All rights reserved.</p>
+            <p class="copyright">© 2026 UniBank™. All rights reserved.</p>
         </footer>
     </div>
     
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggles = document.querySelectorAll('.togglepassword');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const img = this.querySelector('img');
+            if (input.type === 'password') {
+                input.type = 'text';
+                img.src = '../../../assets/hidepw.png';
+                img.alt = 'Hide password';
+            } else {
+                input.type = 'password';
+                img.src = '../../../assets/showpw.png';
+                img.alt = 'Show password';
+            }
+        });
+    });
+});
+</script>
 </html>

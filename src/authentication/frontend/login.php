@@ -40,6 +40,7 @@
                     <div class="inputbox">
                         <label for="password">Password</label>
                         <input type="password" name="password" placeholder="●●●●●●●●●" required>
+                        <button type="button" class="togglepassword"><img src="../../../assets/showpw.png" alt="Show password"></button>
                         <a href="resetpassword.php">Password dimenticata?</a>
                     </div>
                     <button class="loginbtn" type="submit">Login</button>
@@ -80,8 +81,28 @@
                     <a href="#"><button class="contactbtn">Contattaci</button></a>
                 </div>
             </div>
-            <p class="copyright">© 2026 UniBank. All rights reserved.</p>
+            <p class="copyright">© 2026 UniBank™. All rights reserved.</p>
         </footer>
     </div>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggles = document.querySelectorAll('.togglepassword');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const img = this.querySelector('img');
+            if (input.type === 'password') {
+                input.type = 'text';
+                img.src = '../../../assets/hidepw.png';
+                img.alt = 'Hide password';
+            } else {
+                input.type = 'password';
+                img.src = '../../../assets/showpw.png';
+                img.alt = 'Show password';
+            }
+        });
+    });
+});
+</script>
 </html>

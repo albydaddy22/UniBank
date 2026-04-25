@@ -72,9 +72,9 @@
     width: max-content;
     position: relative;
     text-decoration: none;
-    color: #f0b429;
-    font-size: 18px;
-    font-weight: 600;
+    color: var(--color-grey-foreground);
+    font-size: 14px;
+    font-weight: 500;
     padding: 10px 5px;
     margin: 0px 20px;
     transition: all 0.3s ease;
@@ -85,7 +85,7 @@
     content: "";
     position: absolute;
     bottom: 5px;
-    height: 2px;
+    height: 1px;
     width: 100%;
     left: 0;
     border-radius: 10px;
@@ -131,7 +131,7 @@
 .loginbox {
     width: 650px;
     height: fit-content;
-    margin: 40px 0px;
+    margin: 80px 0px;
     border-radius: 12px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
     display: flex;
@@ -154,6 +154,7 @@ form {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
 
 .inputbox input {
@@ -295,8 +296,9 @@ footer ul li a:hover {
 
 .contactbtn {
     padding: 10px 30px;
-    border-radius: 10px;
-    border: 2px solid #f0b429;
+    border-radius: 5px;
+    border: 1px solid var(--color-yellow-primary);
+    font-weight: 600;
     background-color: transparent;
     cursor: pointer;
     color: #f0b429;
@@ -311,7 +313,6 @@ footer ul li a:hover {
 .contactbtn:hover {
     background-color: #f0b429;
     color: #1b2a5e;
-    font-weight: 500;
 }
 
 .copyright {
@@ -320,4 +321,22 @@ footer ul li a:hover {
     bottom: 0;
     width: 100%;
     text-align: right;
+}
+
+.togglepassword {
+    position: absolute;
+    right: 10px;
+    top: 63%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    padding: 0;
+}
+
+.togglepassword img {
+    width: 20px;
+    height: 20px;
 }
