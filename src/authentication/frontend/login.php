@@ -1,13 +1,3 @@
-<?php
-error_reporting(E_ALL & ~E_WARNING);
-ini_set('display_errors', 0);
-session_start();
-
-if($_SESSION['is_logged']) {
-    header('location: ../../index.php');
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

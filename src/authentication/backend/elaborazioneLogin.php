@@ -33,7 +33,7 @@ if(!empty($errors)){
 
 $connection = db_connect();
 
-$query = 'SELECT id_utente, username, password, ruolo, saldo, email FROM utenti WHERE email = ? LIMIT 1';
+$query = 'SELECT id_utente, username, password, ruolo FROM utenti WHERE email = ? LIMIT 1';
 $stmt = mysqli_prepare($connection, $query);
 if(!$stmt){
     die('Errore nella preparazione della query: ' . mysqli_error($connection));
@@ -55,8 +55,6 @@ if(!$user || !password_verify($password, $user['password'])){
 $_SESSION['user_id'] = $user['id_utente'];
 $_SESSION['username'] = $user['username'];
 $_SESSION['ruolo'] = $user['ruolo'];
-$_SESSION['saldo'] = $user['saldo'];
-$_SESSION['email'] = $user['email'];
 $_SESSION['is_logged'] = true;
 
 mysqli_close($connection);

@@ -61,3 +61,11 @@ CREATE TABLE acquisti(
     CONSTRAINT fk_acquisto_dispensa FOREIGN KEY (id_dispensa) REFERENCES dispense(id_dispensa),
     UNIQUE (id_utente, id_dispensa)
 );
+
+CREATE TABLE utentedispensa(
+    id_utentedispensa INT(11) AUTO_INCREMENT PRIMARY KEY,
+    id_dispensa INT(11) NOT NULL,
+    id_utente INT(11) NOT NULL,
+    CONSTRAINT fk_utentedispensa_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente),
+    CONSTRAINT fk_utentedispensa_dispensa FOREIGN KEY (id_dispensa) REFERENCES dispense(id_dispensa)
+);
