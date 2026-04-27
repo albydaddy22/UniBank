@@ -52,33 +52,36 @@ mysqli_close($conn);
                     <li>
                         <a href="" class="listelement">Contattaci</a>
                     </li>
+                    <?php
+                    if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){ ?>
                     <li>
                         <a href="authentication/frontend/login.php">
-                            <?php
-                                if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
-                                    echo '<button class="loginbtn">Login</button>';
-                                }
-                            ?>         
+                            <button class="loginbtn">Login</button>
                         </a>
                     </li>
+                    <?php } ?>
+                    <?php
+                    if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){?>
                     <li>
                         <a href="authentication/frontend/signup.php">
-                            <?php
-                                if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
-                                    echo '<button class="signupbtn">Registrati</button>';
-                                }
-                            ?> 
+                            <button class="signupbtn">Registrati</button>
                         </a>
                     </li>
+                    <?php } ?>
+                    <?php
+                    if(isset($_SESSION['is_logged']) && $_SESSION['is_logged'] == true){ ?>
                     <li>
-                        <a href="authentication/backend/logout.php">
-                            <?php
-                                if(isset($_SESSION['is_logged']) && $_SESSION['is_logged'] == true){
-                                    echo '<button class="loginbtn">Esci</button>';
-                                }
-                            ?> 
-                        </a>
+                        <div class="profileicon">
+                            <img src="../assets/user.png" alt="user">
+                        </div>
+                        <div class="userpopup">
+                            <span>Ciao, <?php echo $_SESSION['username'] ?></span>
+                            <span>Saldo: <?php echo $_SESSION['saldo'] ?><img src="../assets/unitoken.png" alt="UT"></span>
+                            <a href="profile/profile.php" class="mioprofile">Visualizza profilo</a>
+                            <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        </div>
                     </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>

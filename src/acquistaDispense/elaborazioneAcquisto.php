@@ -46,11 +46,6 @@ if($saldoUtente - $dispensa['prezzo'] < 0){
     mysqli_stmt_bind_param($stmt, "ii", $dispensa['prezzo'], $_SESSION['user_id']);
     mysqli_stmt_execute($stmt);
 
-    $query = "INSERT INTO acquisti(id_utente, id_dispensa, data_acquisto) 
-          VALUES ({$_SESSION['user_id']}, $idDispensa, NOW())";
-
-    $ris = mysqli_query($conn, $query);
-
     $percorsoPdf = '../../' . $dispensa['percorso_file'];
     header("Location: " . $percorsoPdf);
     exit();
