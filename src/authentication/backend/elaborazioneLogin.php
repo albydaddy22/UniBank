@@ -55,6 +55,7 @@ if(!$user || !password_verify($password, $user['password'])){
 $_SESSION['user_id'] = $user['id_utente'];
 $_SESSION['username'] = $user['username'];
 $_SESSION['ruolo'] = $user['ruolo'];
+$_SESSION['is_logged'] = true;
 
 mysqli_close($connection);
 
@@ -63,6 +64,6 @@ if((int) $user['ruolo'] === 1){
     exit;
 }
 
-header('Location: ../frontend/utente.html');
+header('Location: ../../index.php');
 exit;
 ?>

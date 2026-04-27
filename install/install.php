@@ -120,7 +120,10 @@ mysqli_select_db($conn, $dbNameEscaped);
 
 $checkUniversita = mysqli_query($conn, 'SELECT COUNT(*) as tot FROM universita');
 $row = mysqli_fetch_assoc($checkUniversita);
-if ((int)$row['tot'] === 0) {
+if((int)$row['tot'] === 0){
+    $passHashAdmin = password_hash('admin123', PASSWORD_DEFAULT);
+    $passHashUtente = password_hash('utente123', PASSWORD_DEFAULT);
+
     $inserisciDati = "
     INSERT INTO universita (nome, citta_sede) VALUES
     ('Università politecnica delle Marche', 'Ancona'),
@@ -510,29 +513,35 @@ if ((int)$row['tot'] === 0) {
     ('Urbanistica e scienze della pianificazione territoriale e ambientale (L-21 / LM-48)');
     ";
 
+    $inserisciDati .= "
+    INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES
+    ('admin', '" . mysqli_real_escape_string($conn, $passHashAdmin) . "', 'admin@unibank.it', 1, 1, 1),
+    ('utente', '" . mysqli_real_escape_string($conn, $passHashUtente) . "', 'utente@email.it', 0, 1, 1);
+    ";
+
+    $inserisciDati .= "
+    INSERT INTO materia (nome) VALUES
+    ('Database e Normalizzazione'),
+    ('NoSQL e Database Non Relazionali'),
+    ('Transazioni e Controllo della Concorrenza');
+
+    INSERT INTO materiaperfacolta (id_materia, id_facolta) VALUES
+    (1, 48),
+    (2, 48),
+    (3, 48);
+
+    INSERT INTO dispense (titolo, descrizione, prezzo, percorso_file, data_caricamento, id_utente, id_materiaperfacolta) VALUES
+    ('Normalizzazione dei Database', 'Guida completa alle forme normali e normalizzazione relazionale', 15, 'dispense/normalizzazione.pdf', NOW(), 2, 1),
+    ('NoSQL - Dispensa Completa', 'Introduzione ai database NoSQL, MongoDB e tecnologie alternative', 9, 'dispense/nosqldispensa.pdf', NOW(), 2, 2),
+    ('Transazioni nei Database', 'ACID, controllo della concorrenza e gestione delle transazioni', 11, 'dispense/transazioni.pdf', NOW(), 2, 3);
+    ";
+
     $inserisciQueries = array_filter(array_map('trim', explode(';', $inserisciDati)));
     foreach($inserisciQueries as $query){
         if(!mysqli_query($conn, $query)){
             die('Errore durante l\'inserimento dei dati: ' . mysqli_error($conn));
         }
     }
-
-    $passAdmin = password_hash('admin123', PASSWORD_DEFAULT);
-    $passUtente = password_hash('utente123', PASSWORD_DEFAULT);
-
-    $adminUsername = 'admin';
-    $adminEmail = 'admin@unibank.it';
-    $stmtAdmin = mysqli_prepare($conn, 'INSERT IGNORE INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES (?, ?, ?, 1, 1, 1)');
-    mysqli_stmt_bind_param($stmtAdmin, 'sss', $adminUsername, $passAdmin, $adminEmail);
-    mysqli_stmt_execute($stmtAdmin);
-    mysqli_stmt_close($stmtAdmin);
-
-    $userUsername = 'utente';
-    $userEmail = 'utente@email.it';
-    $stmtUtente = mysqli_prepare($conn, 'INSERT IGNORE INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES (?, ?, ?, 0, 1, 1)');
-    mysqli_stmt_bind_param($stmtUtente, 'sss', $userUsername, $passUtente, $userEmail);
-    mysqli_stmt_execute($stmtUtente);
-    mysqli_stmt_close($stmtUtente);
 }
 
 $configContent = "<?php\n";

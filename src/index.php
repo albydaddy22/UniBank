@@ -1,9 +1,32 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config.php';
 
-if($_SESSION['isInstalled'] === false || $_SESSION['isInstalled'] === null) {
-    header('location: ../install/install.php');
-}
+$conn = db_connect();
+
+$queryHeader = '
+    SELECT d.id_dispensa, d.titolo, d.prezzo, u.username
+    FROM dispense d, utenti u
+    WHERE d.id_utente = u.id_utente
+    ORDER BY d.data_caricamento DESC
+    LIMIT 3
+';
+$resultHeader = mysqli_query($conn, $queryHeader);
+
+$queryHero ='
+    SELECT d.id_dispensa, d.titolo, d.descrizione, d.prezzo, u.username, m.nome as materia, f.nome as facolta, uni.nome as universita
+    FROM dispense d, utenti u, materiaperfacolta mpf, materia m, facolta f, universita uni
+    WHERE d.id_utente = u.id_utente
+    AND d.id_materiaperfacolta = mpf.id_materiaperfacolta
+    AND mpf.id_materia = m.id_materia
+    AND mpf.id_facolta = f.id_facolta
+    AND u.id_universita = uni.id_universita
+    ORDER BY d.data_caricamento DESC
+    LIMIT 4
+';
+$resultHero = mysqli_query($conn, $queryHero);
+
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -30,10 +53,31 @@ if($_SESSION['isInstalled'] === false || $_SESSION['isInstalled'] === null) {
                         <a href="" class="listelement">Contattaci</a>
                     </li>
                     <li>
-                        <a href="authentication/frontend/login.php"><button class="loginbtn">Login</button></a>
+                        <a href="authentication/frontend/login.php">
+                            <?php
+                                if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
+                                    echo '<button class="loginbtn">Login</button>';
+                                }
+                            ?>         
+                        </a>
                     </li>
                     <li>
-                        <a href="authentication/frontend/signup.php"><button class="signupbtn">Registrati</button></a>
+                        <a href="authentication/frontend/signup.php">
+                            <?php
+                                if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
+                                    echo '<button class="signupbtn">Registrati</button>';
+                                }
+                            ?> 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="authentication/backend/logout.php">
+                            <?php
+                                if(isset($_SESSION['is_logged']) && $_SESSION['is_logged'] == true){
+                                    echo '<button class="loginbtn">Esci</button>';
+                                }
+                            ?> 
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -51,18 +95,14 @@ if($_SESSION['isInstalled'] === false || $_SESSION['isInstalled'] === null) {
                     </div>
                 </div>
                 <div class="headerdispense">
-                    <div class="hddispensabox">
-                        <span class="hdnomedispensa" >Dispensa 1</span>
-                        <span class="hdprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                    </div>
-                    <div class="hddispensabox">
-                        <span class="hdnomedispensa" >Dispensa 2</span>
-                        <span class="hdprezzodispensa">8 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                    </div>
-                    <div class="hddispensabox">
-                        <span class="hdnomedispensa" >Dispensa 3</span>
-                        <span class="hdprezzodispensa">15 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                    </div>
+                    <?php
+                    while($disp = mysqli_fetch_assoc($resultHeader)) {
+                        echo '<div class="hddispensabox">';
+                        echo '<span class="hdnomedispensa">' . htmlspecialchars($disp['titolo']) . '</span>';
+                        echo '<span class="hdprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
+                        echo '</div>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -73,62 +113,32 @@ if($_SESSION['isInstalled'] === false || $_SESSION['isInstalled'] === null) {
                     <a href="" class="veditutte">Vedi tutte →</a>
                 </div>
                 <div class="herodispense">
-                    <div class="hrdispensabox">
-                        <div class="dbtextbox">
-                            <img class="dbdocument" src="../assets/document.png" alt="">
-                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
-                            <p class="dbcorso">Corso</p>
-                            <p class="dbuniversita">Università</p>
-                            <p class="dbfacolta">Facoltà</p>
-                            <p class="dbuser">di User</p>
-                        </div>
-                        <div class="dbbuyfield">
-                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                            <button class="buybtn">Compra</button>
-                        </div>
-                    </div>
-                    <div class="hrdispensabox">
-                        <div class="dbtextbox">
-                            <img class="dbdocument" src="../assets/document.png" alt="">
-                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
-                            <p class="dbcorso">Corso</p>
-                            <p class="dbuniversita">Università</p>
-                            <p class="dbfacolta">Facoltà</p>
-                            <p class="dbuser">di User</p>
-                        </div>
-                        <div class="dbbuyfield">
-                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                            <button class="buybtn">Compra</button>
-                        </div>
-                    </div>
-                    <div class="hrdispensabox">
-                        <div class="dbtextbox">
-                            <img class="dbdocument" src="../assets/document.png" alt="">
-                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
-                            <p class="dbcorso">Corso</p>
-                            <p class="dbuniversita">Università</p>
-                            <p class="dbfacolta">Facoltà</p>
-                            <p class="dbuser">di User</p>
-                        </div>
-                        <div class="dbbuyfield">
-                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                            <button class="buybtn">Compra</button>
-                        </div>
-                    </div>
-                    <div class="hrdispensabox">
-                        <div class="dbtextbox">
-                            <img class="dbdocument" src="../assets/document.png" alt="">
-                            <h4 class="dbnomedispensa">Nome Dispensa</h4>
-                            <p class="dbcorso">Corso</p>
-                            <p class="dbuniversita">Università</p>
-                            <p class="dbfacolta">Facoltà</p>
-                            <p class="dbuser">di User</p>
-                        </div>
-                        <div class="dbbuyfield">
-                            <span class="dbprezzodispensa">10 <img class="ut"src="../assets/unitoken.png" alt="UT"></span>
-                            <button class="buybtn">Compra</button>
-                        </div>
-                    </div>
+                    <?php
+                    $count = 0;
+                    while($disp = mysqli_fetch_assoc($resultHero)){
+                        $count++;
+                        echo '<div class="hrdispensabox">';
+                        echo '<div class="dbtextbox">';
+                        echo '<img class="dbdocument" src="../assets/document.png" alt="">';
+                        echo '<h4 class="dbnomedispensa">' . htmlspecialchars($disp['titolo']) . '</h4>';
+                        echo '<p class="dbcorso">' . htmlspecialchars($disp['materia']) . '</p>';
+                        echo '<p class="dbuniversita">' . htmlspecialchars($disp['universita']) . '</p>';
+                        echo '<p class="dbfacolta">' . htmlspecialchars($disp['facolta']) . '</p>';
+                        echo '<p class="dbuser">di ' . htmlspecialchars($disp['username']) . '</p>';
+                        echo '</div>';
+                        echo '<div class="dbbuyfield">';
+                        echo '<span class="dbprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
+                        echo '<form action="./acquistaDispense/elaborazioneAcquisto.php" method="POST">';
+                        echo '<input type="hidden" name="id_dispensa" value="' . $disp['id_dispensa'] . '">';
+                        echo '<button type="submit" class="buybtn">Compra</button>';
+                        echo '</form>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    if($count == 0){
+                        echo '<p>Nessuna dispensa disponibile al momento.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>

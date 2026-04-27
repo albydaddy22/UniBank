@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
     header('Location: ../frontend/signup.php');
     exit;
 }
@@ -44,7 +44,7 @@ if(!ctype_digit($universita) || !ctype_digit($facolta)){
 }
 
 
-if (!empty($errors)){
+if(!empty($errors)){
     $message = implode('<br>', array_map('htmlspecialchars', $errors));
     echo "<p>$message</p>";
     echo '<p><a href="../frontend/signup.php">Torna alla registrazione</a></p>';
@@ -93,5 +93,4 @@ mysqli_stmt_close($insertStmt);
 mysqli_close($connection);
 echo '<p style="color:red;">Errore durante la registrazione: ' . htmlspecialchars($errorMessage) . '</p>';
 echo '<p><a href="../frontend/signup.php">Torna alla registrazione</a></p>';
-
 ?>
