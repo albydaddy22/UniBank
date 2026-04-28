@@ -206,7 +206,6 @@ $conn = db_connect();
             <div class="pfcolumn">
                 <h4>Dispense acquistate</h4>
                 <div class="pfbox">
-                    <div class="pfboxrow">
                             <?php
                                 if(isset($_SESSION['user_id'])){
                                     $query = "SELECT d.id_dispensa, d.titolo, d.prezzo, a.data_acquisto, u.username
@@ -224,11 +223,13 @@ $conn = db_connect();
                                             echo '<p>Nessuna dispensa acquistata</p>';
                                         }else{
                                             while($riga = mysqli_fetch_assoc($ris)){
+                                                echo '<div class="pfboxrow">';
                                                 echo '<div>';
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
                                                 echo '<p>di ' . htmlspecialchars($riga['username']) . '</p>';
                                                 echo '</div>';
                                                 echo '<button class="downloadbtn">⬇ Download</button>';
+                                                echo '</div>';
                                             }
                                         }
                                     }
@@ -236,7 +237,6 @@ $conn = db_connect();
                                     echo '<p>Accedi per visualizzare le tue dispense</p>';
                                 }
                             ?>
-                    </div>
                 </div>
             </div>
         </section>
