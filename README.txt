@@ -9,3 +9,5 @@ password hashate utili nel caso in cui il db non riconosca le password, quindi r
 
 REGISTRAZIONE
 se si vuole provare la registrazione al nostro sito, schiaccia il pulsante registrati in basso al form.
+
+d
