@@ -1,4 +1,4 @@
-<?php
+<?php palle
 session_start();
 require_once __DIR__ . '/../config.php';
 
