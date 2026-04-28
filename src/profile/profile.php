@@ -229,7 +229,10 @@ $conn = db_connect();
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
                                                 echo '<p>di ' . htmlspecialchars($riga['username']) .' | acquistata in data ' . htmlspecialchars($riga['data_acquisto']) .'</p>';
                                                 echo '</div>';
-                                                echo '<button class="downloadbtn">⬇ Download</button>';
+                                                echo '<form method="POST" action="../downloadDispense/downloadDispensa.php" style="display:inline;">';
+                                                echo '<input type="hidden" name="id_dispensa" value="' . $riga['id_dispensa'] . '">';
+                                                echo '<button type="submit" class="downloadbtn">⬇ Download</button>';
+                                                echo '</form>';
                                                 echo '</div>';
                                             }
                                         }
