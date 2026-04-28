@@ -25,6 +25,10 @@ $queryHero ='
     LIMIT 4
 ';
 $resultHero = mysqli_query($conn, $queryHero);
+
+if(!isset($_SESSION['is_logged'])){
+    $_SESSION['is_logged'] = false;
+}
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +77,16 @@ $resultHero = mysqli_query($conn, $queryHero);
                             <img src="../assets/user.png" alt="user">
                         </div>
                         <div class="userpopup">
+                            <div class="uppfavatar">
+                                <?php
+                                $initials = '';
+                                if(isset($_SESSION['username'])){
+                                    $name = trim($_SESSION['username']);
+                                    $initials = strtoupper(substr($name,0,1));
+                                }else{ $initials = 'U'; }
+                                ?>
+                                <span><?php echo $initials; ?></span>
+                            </div>
                             <span>Ciao, <?php echo $_SESSION['username'] ?></span>
                             <span>Saldo: 
                             <?php 
@@ -86,7 +100,7 @@ $resultHero = mysqli_query($conn, $queryHero);
                                 }
                             ?>
                             <img src="../assets/unitoken.png" alt="UT"></span>
-                            <a href="profile/profile.php" class="mioprofile">Visualizza profilo</a>
+                            <a href="profile/profile.php" class="mioprofile"><button class="visprofilebtn">Visualizza profilo</button></a>
                             <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                         </div>
                     </li>
@@ -102,7 +116,17 @@ $resultHero = mysqli_query($conn, $queryHero);
                     <h1>Il <span>mercato</span> del sapere universitario</h1>
                     <p>Condividi le tue dispense e guadagna UniToken. Acquista materiali di qualità dai tuoi colleghi universitari.</p>
                     <div class="btnbox">
-                        <button class="startbtn">Inizia Gratis</button>
+                        <?php if($_SESSION['is_logged'] == true) {?>
+                            <a href="">
+                                <button class="startbtn">Carica dispense</button>
+                            </a>
+                        <?php }
+                        else { ?>
+                            <a href="authentication/frontend/signup.php">
+                                <button class="startbtn">Inizia Gratis</button>
+                            </a>
+                        <?php } ?>
+
                         <button class="sfogliabtn">Sfoglia dispense</button>
                     </div>
                 </div>

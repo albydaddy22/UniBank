@@ -49,7 +49,17 @@ $conn = db_connect();
                         <img src="../../assets/user.png" alt="user">
                     </div>
                     <div class="userpopup">
-                        <span>Ciao, <?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></span>
+                        <div class="uppfavatar">
+                            <?php
+                            $initials = '';
+                            if(isset($_SESSION['username'])){
+                                $name = trim($_SESSION['username']);
+                                $initials = strtoupper(substr($name,0,1));
+                            }else{ $initials = 'U'; }
+                            ?>
+                            <span><?php echo $initials; ?></span>
+                        </div>
+                        <span>Ciao,&nbsp;<span class="urnamep"> <?php echo $_SESSION['username']?></span></span>
                         <span>Saldo: 
                             <?php 
                                 $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
@@ -62,8 +72,7 @@ $conn = db_connect();
                                 }
                             ?>
                             <img src="../../assets/unitoken.png" alt="UT"></span>
-                        <a href="#" class="mioprofile">Visualizza profilo</a>
-                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout →</button></a>
                     </div>
                 </li>
                 <?php } ?>
@@ -88,7 +97,9 @@ $conn = db_connect();
                 </div>
                 <div class="pfmeta">
                     <h3 class="pfname"><?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></h3>
-                    <p class="pfuniv">Università • Facoltà</p>
+                    <?php
+                        echo '<p class="pfuniv">'.'•'.$_SESSION['universita'] .'<br>'.'•'.  $_SESSION['facolta'].'</p>'
+                    ?>
                     <span class="pfbadge"><img src="../../assets/unitoken.png" alt="UT">
                     <?php 
                                 $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
@@ -164,31 +175,38 @@ $conn = db_connect();
 
         <section class="pfsections">
             <div class="pfcolumn">
-                <h4>Le mie dispense</h4>
+                <h4>Dispense caricate da me</h4>
                 <div class="pfbox">
-                    <div class="pfboxrow">
-                        <div>
-                            <h5>Dispensa 1</h5>
-                            <p>Corso 1</p>
-                        </div>
-                        <span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT"> 12 token</span>
-                    </div>
-                </div>
-                <div class="pfbox">
-                    <div class="pfboxrow">
-                        <div>
-                            <h5>Dispensa 2</h5>
-                            <p>Corso 2</p>
-                        </div>
-                        <span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT"> 15 token</span>
-                    </div>
+                    <?php
+                        $query = "
+                                SELECT *
+                                FROM dispense d, materiaperfacolta m, utenti u
+                                WHERE d.id_utente = u.id_utente
+                                AND d.id_materiaperfacolta = m.id_materiaperfacolta
+                                AND d.id_utente = {$_SESSION['user_id']}
+                        ";
+                        $ris = mysqli_query($conn,$query);
+                        if(mysqli_num_rows($ris) == 0){
+                            echo '<p>Nessuna dispensa caricata</p>';
+                        }else{
+                            while($riga = mysqli_fetch_assoc($ris)){
+                                echo '<div class="pfboxrow">';
+                                        echo '<div>';
+                                            echo '<h5>'.$riga['titolo'].'</h5>';
+                                            echo '<p>' .'Caricata in data '.$riga['data_caricamento']. '</p>';
+                                            #echo '<p>'.$riga[''].'</p>';
+                                        echo '</div>';
+                                    echo '<span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT">'. $riga['prezzo'].' UniToken'.'</span>';
+                                echo '</div>';
+                            }
+                        }
+                        
+                    ?>
                 </div>
             </div>
             <div class="pfcolumn">
                 <h4>Dispense acquistate</h4>
                 <div class="pfbox">
-                    <div class="pfboxrow">
-                        <div>
                             <?php
                                 if(isset($_SESSION['user_id'])){
                                     $query = "SELECT d.id_dispensa, d.titolo, d.prezzo, a.data_acquisto, u.username
@@ -206,9 +224,16 @@ $conn = db_connect();
                                             echo '<p>Nessuna dispensa acquistata</p>';
                                         }else{
                                             while($riga = mysqli_fetch_assoc($ris)){
+                                                echo '<div class="pfboxrow">';
+                                                echo '<div>';
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
-                                                echo '<p>di ' . htmlspecialchars($riga['username']) . '</p>';
-                                                echo '<button class="downloadbtn">⬇ Download</button>';
+                                                echo '<p>di ' . htmlspecialchars($riga['username']) .' | acquistata in data ' . htmlspecialchars($riga['data_acquisto']) .'</p>';
+                                                echo '</div>';
+                                                echo '<form method="POST" action="../downloadDispense/downloadDispensa.php" style="display:inline;">';
+                                                echo '<input type="hidden" name="id_dispensa" value="' . $riga['id_dispensa'] . '">';
+                                                echo '<button type="submit" class="downloadbtn">⬇ Download</button>';
+                                                echo '</form>';
+                                                echo '</div>';
                                             }
                                         }
                                     }
@@ -216,8 +241,6 @@ $conn = db_connect();
                                     echo '<p>Accedi per visualizzare le tue dispense</p>';
                                 }
                             ?>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
