@@ -172,7 +172,7 @@ $conn = db_connect();
                             <p>Corso 1</p>
                         </div>
                         <span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT"> 12 token</span>
-                    </div>
+                    </div>\
                 </div>
                 <div class="pfbox">
                     <div class="pfboxrow">
