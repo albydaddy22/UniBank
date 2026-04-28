@@ -1,8 +1,7 @@
-<?php palle
+<?php 
 session_start();
 require_once __DIR__ . '/../config.php';
 
-$palle = "gay";
 
 $conn = db_connect();
 

@@ -58,6 +58,21 @@ $_SESSION['ruolo'] = $user['ruolo'];
 $_SESSION['email'] = $user['email'];
 $_SESSION['is_logged'] = true;
 
+$query = "
+    SELECT u.nome AS nome_universita, f.nome AS nome_facolta
+    FROM universita u, facolta f, utenti ut
+    WHERE ut.id_universita = u.id_universita
+    AND ut.id_facolta = f.id_facolta
+    AND ut.id_utente = {$_SESSION['user_id']}
+";
+
+$ris = mysqli_query($connection, $query);
+$record = mysqli_fetch_assoc($ris);
+
+$_SESSION['universita'] = $record['nome_universita'];
+$_SESSION['facolta'] = $record['nome_facolta'];
+
+
 mysqli_close($connection);
 
 if((int) $user['ruolo'] === 1){
