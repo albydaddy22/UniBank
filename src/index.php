@@ -1,8 +1,6 @@
-<?php palle
+<?php
 session_start();
 require_once __DIR__ . '/../config.php';
-
-$palle = "gay";
 
 $conn = db_connect();
 
@@ -79,6 +77,16 @@ if(!isset($_SESSION['is_logged'])){
                             <img src="../assets/user.png" alt="user">
                         </div>
                         <div class="userpopup">
+                            <div class="uppfavatar">
+                                <?php
+                                $initials = '';
+                                if(isset($_SESSION['username'])){
+                                    $name = trim($_SESSION['username']);
+                                    $initials = strtoupper(substr($name,0,1));
+                                }else{ $initials = 'U'; }
+                                ?>
+                                <span><?php echo $initials; ?></span>
+                            </div>
                             <span>Ciao, <?php echo $_SESSION['username'] ?></span>
                             <span>Saldo: 
                             <?php 
@@ -92,7 +100,7 @@ if(!isset($_SESSION['is_logged'])){
                                 }
                             ?>
                             <img src="../assets/unitoken.png" alt="UT"></span>
-                            <a href="profile/profile.php" class="mioprofile">Visualizza profilo</a>
+                            <a href="profile/profile.php" class="mioprofile"><button class="visprofilebtn">Visualizza profilo</button></a>
                             <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                         </div>
                     </li>
