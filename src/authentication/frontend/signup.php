@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-if($_SESSION['is_logged']) {
-    header('location: ../../index.php');
-}
 ?>
 
 <!DOCTYPE html>

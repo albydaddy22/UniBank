@@ -1,7 +1,8 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../config.php';
+$conn = db_connect();
 ?>
-
 <!doctype html>
 <html lang="it">
 <head>
@@ -28,6 +29,9 @@ session_start();
                 <li>
                     <a href="#" class="listelement">Contattaci</a>
                 </li>
+                <li>
+                    <a href="../index.php" class="listelement">Home</a>
+                </li>
                 <?php if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){ ?>
                 <li>
                     <a href="../authentication/frontend/login.php">
@@ -46,7 +50,17 @@ session_start();
                     </div>
                     <div class="userpopup">
                         <span>Ciao, <?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></span>
-                        <span>Saldo: <?php echo htmlspecialchars($_SESSION['saldo'] ?? '0'); ?>
+                        <span>Saldo: 
+                            <?php 
+                                $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
+                                $ris = mysqli_query($conn, $query);
+                                if($ris){
+                                    $row = mysqli_fetch_assoc($ris);
+                                    echo htmlspecialchars($row['saldo']);
+                                }else{
+                                    echo '0';
+                                }
+                            ?>
                             <img src="../../assets/unitoken.png" alt="UT"></span>
                         <a href="#" class="mioprofile">Visualizza profilo</a>
                         <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
@@ -68,14 +82,24 @@ session_start();
                     if(isset($_SESSION['username'])){
                         $name = trim($_SESSION['username']);
                         $initials = strtoupper(substr($name,0,1));
-                    } else { $initials = 'U'; }
+                    }else{ $initials = 'U'; }
                     ?>
                     <span><?php echo $initials; ?></span>
                 </div>
                 <div class="pfmeta">
                     <h3 class="pfname"><?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></h3>
                     <p class="pfuniv">Università • Facoltà</p>
-                    <span class="pfbadge"><img src="../../assets/unitoken.png" alt="UT"> <?php echo htmlspecialchars($_SESSION['saldo'] ?? '45'); ?> UniToken</span>
+                    <span class="pfbadge"><img src="../../assets/unitoken.png" alt="UT">
+                    <?php 
+                                $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
+                                $ris = mysqli_query($conn, $query);
+                                if($ris){
+                                    $row = mysqli_fetch_assoc($ris);
+                                    echo htmlspecialchars($row['saldo']);
+                                }else{
+                                    echo '0';
+                                }
+                    ?> UniToken</span>
                 </div>
             </div>
             <div class="pfactions">
@@ -86,19 +110,55 @@ session_start();
         <section class="pfstats">
             <div class="statcard">
                 <span class="statlabel">Dispense caricate</span>
-                <span class="statvalue">12</span>
+                <?php
+                    $query = "SELECT COUNT(*) AS totaleCaricate FROM dispense WHERE id_utente = {$_SESSION['user_id']}";
+                    $ris = mysqli_query($conn, $query);
+                    $dispenseCaricate = mysqli_fetch_assoc($ris);
+                    echo '<span class="statvalue">' . htmlspecialchars($dispenseCaricate['totaleCaricate']) . '</span>';
+                ?>
             </div>
             <div class="statcard">
                 <span class="statlabel">Dispense acquistate</span>
-                <span class="statvalue">8</span>
+                <?php
+                    $query = "SELECT COUNT(*) AS totaleAcquistate FROM acquisti WHERE id_utente = {$_SESSION['user_id']}";
+                    $ris = mysqli_query($conn, $query);
+                    $dispenseAcquistate = mysqli_fetch_assoc($ris);
+                    echo '<span class="statvalue">' . htmlspecialchars($dispenseAcquistate['totaleAcquistate']) . '</span>';
+                ?>
             </div>
             <div class="statcard">
                 <span class="statlabel">Token guadagnati</span>
-                <span class="statvalue green">156</span>
+                <?php
+                    $query = "
+                            SELECT prezzo 
+                            FROM dispense d,acquisti a
+                            WHERE d.id_dispensa = a.id_dispensa
+                            AND d.id_utente = {$_SESSION['user_id']}
+                            ";
+                    $ris = mysqli_query($conn,$query);
+                    $guadagno = 0;
+                    while($riga = mysqli_fetch_assoc($ris)){
+                        $guadagno+=$riga['prezzo'];
+                    }
+                    echo '<span class="statvalue green">'.$guadagno.'</span>';
+                ?>
             </div>
             <div class="statcard">
                 <span class="statlabel">Token spesi</span>
-                <span class="statvalue yellow">72</span>
+                <?php
+                    $query = "
+                            SELECT prezzo 
+                            FROM dispense d,acquisti a
+                            WHERE d.id_dispensa = a.id_dispensa
+                            AND a.id_utente = {$_SESSION['user_id']}
+                            ";
+                    $ris = mysqli_query($conn,$query);
+                    $speso = 0;
+                    while($riga = mysqli_fetch_assoc($ris)){
+                        $speso+=$riga['prezzo'];
+                    }
+                    echo '<span class="statvalue yellow">'.$speso.'</span>';
+                ?>
             </div>
         </section>
 
@@ -112,7 +172,7 @@ session_start();
                             <p>Corso 1</p>
                         </div>
                         <span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT"> 12 token</span>
-                    </div>\
+                    </div>
                 </div>
                 <div class="pfbox">
                     <div class="pfboxrow">
@@ -129,19 +189,34 @@ session_start();
                 <div class="pfbox">
                     <div class="pfboxrow">
                         <div>
-                            <h5>Dispensa 3</h5>
-                            <p>di user</p>
+                            <?php
+                                if(isset($_SESSION['user_id'])){
+                                    $query = "SELECT d.id_dispensa, d.titolo, d.prezzo, a.data_acquisto, u.username
+                                              FROM acquisti a, dispense d, utenti u
+                                              WHERE a.id_utente = {$_SESSION['user_id']}
+                                              AND a.id_dispensa = d.id_dispensa
+                                              AND d.id_utente = u.id_utente
+                                              ORDER BY a.data_acquisto DESC";
+                                              
+                                    $ris = mysqli_query($conn, $query);
+                                    if(!$ris){
+                                        echo '<p>Errore caricamento dispense: ' . htmlspecialchars(mysqli_error($conn)) . '</p>';
+                                    }else{
+                                        if(mysqli_num_rows($ris) == 0){
+                                            echo '<p>Nessuna dispensa acquistata</p>';
+                                        }else{
+                                            while($riga = mysqli_fetch_assoc($ris)){
+                                                echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
+                                                echo '<p>di ' . htmlspecialchars($riga['username']) . '</p>';
+                                                echo '<button class="downloadbtn">⬇ Download</button>';
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    echo '<p>Accedi per visualizzare le tue dispense</p>';
+                                }
+                            ?>
                         </div>
-                        <button class="downloadbtn">⬇ Download</button>
-                    </div>
-                </div>
-                <div class="pfbox">
-                    <div class="pfboxrow">
-                        <div>
-                            <h5>Dispensa 4</h5>
-                            <p>di user</p>
-                        </div>
-                        <button class="downloadbtn">⬇ Download</button>
                     </div>
                 </div>
             </div>

@@ -25,8 +25,6 @@ $queryHero ='
     LIMIT 4
 ';
 $resultHero = mysqli_query($conn, $queryHero);
-
-mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +74,18 @@ mysqli_close($conn);
                         </div>
                         <div class="userpopup">
                             <span>Ciao, <?php echo $_SESSION['username'] ?></span>
-                            <span>Saldo: <?php echo $_SESSION['saldo'] ?><img src="../assets/unitoken.png" alt="UT"></span>
+                            <span>Saldo: 
+                            <?php 
+                                $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
+                                $ris = mysqli_query($conn, $query);
+                                if($ris){
+                                    $row = mysqli_fetch_assoc($ris);
+                                    echo htmlspecialchars($row['saldo']);
+                                }else{
+                                    echo '0';
+                                }
+                            ?>
+                            <img src="../assets/unitoken.png" alt="UT"></span>
                             <a href="profile/profile.php" class="mioprofile">Visualizza profilo</a>
                             <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                         </div>
@@ -99,7 +108,7 @@ mysqli_close($conn);
                 </div>
                 <div class="headerdispense">
                     <?php
-                    while($disp = mysqli_fetch_assoc($resultHeader)) {
+                    while($disp = mysqli_fetch_assoc($resultHeader)){
                         echo '<div class="hddispensabox">';
                         echo '<span class="hdnomedispensa">' . htmlspecialchars($disp['titolo']) . '</span>';
                         echo '<span class="hdprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
