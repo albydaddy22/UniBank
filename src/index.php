@@ -25,6 +25,10 @@ $queryHero ='
     LIMIT 4
 ';
 $resultHero = mysqli_query($conn, $queryHero);
+
+if(!isset($_SESSION['is_logged'])){
+    $_SESSION['is_logged'] = false;
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +106,17 @@ $resultHero = mysqli_query($conn, $queryHero);
                     <h1>Il <span>mercato</span> del sapere universitario</h1>
                     <p>Condividi le tue dispense e guadagna UniToken. Acquista materiali di qualità dai tuoi colleghi universitari.</p>
                     <div class="btnbox">
-                        <button class="startbtn">Inizia Gratis</button>
+                        <?php if($_SESSION['is_logged'] == true) {?>
+                            <a href="">
+                                <button class="startbtn">Carica dispense</button>
+                            </a>
+                        <?php }
+                        else { ?>
+                            <a href="authentication/frontend/signup.php">
+                                <button class="startbtn">Inizia Gratis</button>
+                            </a>
+                        <?php } ?>
+
                         <button class="sfogliabtn">Sfoglia dispense</button>
                     </div>
                 </div>
