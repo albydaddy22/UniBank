@@ -50,8 +50,9 @@ $stmt = mysqli_prepare($conn, "INSERT INTO acquisti(id_utente, id_dispensa, data
 mysqli_stmt_bind_param($stmt, "ii", $_SESSION['user_id'], $idDispensa);
 $ris = mysqli_stmt_execute($stmt);
 
-    $percorsoPdf = '../../' . $dispensa['percorso_file'];
-    header("Location: " . $percorsoPdf);
+    echo "dispensa comprata con successo";
+    echo "<br>";
+    echo "<a href = ../index.php>torna alla homepage</a>";
     exit();
 }
 ?>
