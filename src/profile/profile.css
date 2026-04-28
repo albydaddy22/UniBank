@@ -146,6 +146,11 @@
 .profileicon img {
     width: 100%;
 }
+.urnamep {
+    font-weight: 600;
+    font-style: italic;
+    color: var(--color-yellow-primary);
+}
 
 .userpopup {
     display: flex;
@@ -160,7 +165,9 @@
     height: fit-content;
     top: 50%;
     right: 9%;
-    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -257,6 +264,19 @@ body {
     color: #1b2a5e;
     font-weight: 800;
     font-size: 26px;
+}
+
+.uppfavatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ffd45c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1b2a5e;
+    font-weight: 800;
+    font-size: 18px;
 }
 
 .pfmeta h3 {

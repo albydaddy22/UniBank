@@ -409,6 +409,12 @@
     width: 100%;
 }
 
+.urnamep {
+    font-weight: 600;
+    font-style: italic;
+    color: var(--color-yellow-primary);
+}
+
 .userpopup {
     display: flex;
     flex-direction: column;
@@ -422,10 +428,42 @@
     height: fit-content;
     top: 50%;
     right: 9%;
-    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.uppfavatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ffd45c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1b2a5e;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.visprofilebtn {
+    padding: 8px 25px;
+    border-radius: 5px;
+    border: 1px solid green;
+    background-color: rgba(0, 255, 0, 0.3);
+    cursor: pointer;
+    color: green;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.visprofilebtn:hover {
+    background-color: rgba(0, 255, 0, 0.45);
+    border-radius: 10px;
+    color: #006c00;
 }
 
 .logoutbtn {

@@ -49,7 +49,17 @@ $conn = db_connect();
                         <img src="../../assets/user.png" alt="user">
                     </div>
                     <div class="userpopup">
-                        <span>Ciao, <?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></span>
+                        <div class="uppfavatar">
+                            <?php
+                            $initials = '';
+                            if(isset($_SESSION['username'])){
+                                $name = trim($_SESSION['username']);
+                                $initials = strtoupper(substr($name,0,1));
+                            }else{ $initials = 'U'; }
+                            ?>
+                            <span><?php echo $initials; ?></span>
+                        </div>
+                        <span>Ciao,&nbsp;<span class="urnamep"> <?php echo $_SESSION['username']?></span></span>
                         <span>Saldo: 
                             <?php 
                                 $query = "SELECT saldo FROM utenti WHERE id_utente = {$_SESSION['user_id']}";
@@ -62,8 +72,7 @@ $conn = db_connect();
                                 }
                             ?>
                             <img src="../../assets/unitoken.png" alt="UT"></span>
-                        <a href="#" class="mioprofile">Visualizza profilo</a>
-                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout →</button></a>
                     </div>
                 </li>
                 <?php } ?>
@@ -188,7 +197,6 @@ $conn = db_connect();
                 <h4>Dispense acquistate</h4>
                 <div class="pfbox">
                     <div class="pfboxrow">
-                        <div>
                             <?php
                                 if(isset($_SESSION['user_id'])){
                                     $query = "SELECT d.id_dispensa, d.titolo, d.prezzo, a.data_acquisto, u.username
@@ -206,8 +214,10 @@ $conn = db_connect();
                                             echo '<p>Nessuna dispensa acquistata</p>';
                                         }else{
                                             while($riga = mysqli_fetch_assoc($ris)){
+                                                echo '<div>';
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
                                                 echo '<p>di ' . htmlspecialchars($riga['username']) . '</p>';
+                                                echo '</div>';
                                                 echo '<button class="downloadbtn">⬇ Download</button>';
                                             }
                                         }
@@ -216,7 +226,6 @@ $conn = db_connect();
                                     echo '<p>Accedi per visualizzare le tue dispense</p>';
                                 }
                             ?>
-                        </div>
                     </div>
                 </div>
             </div>
