@@ -455,6 +455,14 @@ body {
     width: 16px;
 }
 
+.downloadbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
 .downloadbtn {
     background-color: var(--color-blue-background);
     color: #fff;
@@ -465,7 +473,6 @@ body {
     border-radius: 6px;
     cursor: pointer;
     transition: 0.3s all ease;
-    margin-left: 10px;
 }
 
 .downloadbtn img {

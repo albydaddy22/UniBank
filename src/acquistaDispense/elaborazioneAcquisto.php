@@ -104,6 +104,7 @@ try{
 
 
     mysqli_commit($conn);
+    $_SESSION['comprato'] = true;
     mysqli_close($conn);
 
     echo "Dispensa comprata con successo!";
@@ -115,8 +116,8 @@ try{
     if($conn){
         mysqli_rollback($conn);
         mysqli_close($conn);
+        $_SESSION['comprato'] = true;
     }
-    
     echo "rrrore durante l'acquisto: " . ($e->getMessage());
     echo "<br>";
     echo "<a href='../index.php'>torna alla homepage</a>";

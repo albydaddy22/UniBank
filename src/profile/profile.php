@@ -227,12 +227,14 @@ $conn = db_connect();
                                                 echo '<div class="pfboxrow">';
                                                 echo '<div>';
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
-                                                echo '<p>di ' . htmlspecialchars($riga['username']) .' | acquistata in data ' . htmlspecialchars($riga['data_acquisto']) .'</p>';
+                                                echo '<p>di ' . htmlspecialchars($riga['username']) .' | acquistata in data ' . htmlspecialchars(substr($riga['data_acquisto'], 0, 10)) .'</p>';
                                                 echo '<form method="POST" action="../downloadDispense/downloadDispensa.php" style="display:inline;">';
                                                 echo '</div>';
                                                 echo '<input type="hidden" name="id_dispensa" value="' . $riga['id_dispensa'] . '">';
+                                                echo '<div class="downloadbox">';
                                                 echo '<span class="pricebadge2">'.'-'.$riga['prezzo'].'<img src="../../assets/unitoken.png" alt="UT">' .'</span>';
                                                 echo '<button type="submit" class="downloadbtn"><img src="../../assets/download.png" alt="Download"></button>';
+                                                echo '</div>';
                                                 echo '</div>';
                                                 
                                                 echo '</form>';
@@ -266,13 +268,13 @@ $conn = db_connect();
                                         echo '<p>errore: ' . mysqli_error($conn) . '</p>';
                                     }else{
                                         if(mysqli_num_rows($ris) == 0){
-                                            echo '<p>nessuno ha ancora comprato le tue dispense</p>';
+                                            echo '<p>Nessuno ha ancora comprato le tue dispense</p>';
                                         }else{
                                             while($riga = mysqli_fetch_assoc($ris)){
                                                 echo '<div class="pfboxrow">';
                                                 echo '<div>';
                                                 echo '<h5>' . $riga['titolo'] . '</h5>';
-                                                echo '<p>' . $riga['username'] . ' da ' . htmlspecialchars($riga['nomeUni']) . ' • ' . htmlspecialchars($riga['nomeFacolta']) . ' | Acquistata in data ' . htmlspecialchars($riga['data_acquisto']) . '</p>';
+                                                echo '<p>' . $riga['username'] . ' da ' . htmlspecialchars($riga['nomeUni']) . ' • ' . htmlspecialchars($riga['nomeFacolta']) . ' | Acquistata in data ' . htmlspecialchars(substr($riga['data_acquisto'], 0, 10)) . '</p>';
                                                 echo '</div>';
                                                 echo '<span class="pricebadge1">'.'+'.$riga['prezzoDispensa'].'<img src="../../assets/unitoken.png" alt="UT">' .'</span>';
                                                 echo '</div>';
