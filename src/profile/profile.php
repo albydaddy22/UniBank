@@ -196,7 +196,7 @@ $conn = db_connect();
                                             echo '<p>' .'Caricata in data '.$riga['data_caricamento']. '</p>';
                                             #echo '<p>'.$riga[''].'</p>';
                                         echo '</div>';
-                                    echo '<span class="pricebadge"><img src="../../assets/unitoken.png" alt="UT">'. $riga['prezzo'].' UniToken'.'</span>';
+                                    echo '<span class="pricebadge">'.$riga['prezzo'].'<img src="../../assets/unitoken.png" alt="UT">' .'</span>';
                                 echo '</div>';
                             }
                         }
@@ -228,12 +228,14 @@ $conn = db_connect();
                                                 echo '<div>';
                                                 echo '<h5>' . htmlspecialchars($riga['titolo']) . '</h5>';
                                                 echo '<p>di ' . htmlspecialchars($riga['username']) .' | acquistata in data ' . htmlspecialchars($riga['data_acquisto']) .'</p>';
-                                                echo '</div>';
                                                 echo '<form method="POST" action="../downloadDispense/downloadDispensa.php" style="display:inline;">';
-                                                echo '<input type="hidden" name="id_dispensa" value="' . $riga['id_dispensa'] . '">';
-                                                echo '<button type="submit" class="downloadbtn">⬇ Download</button>';
-                                                echo '</form>';
                                                 echo '</div>';
+                                                echo '<input type="hidden" name="id_dispensa" value="' . $riga['id_dispensa'] . '">';
+                                                echo '<span class="pricebadge2">'.'-'.$riga['prezzo'].'<img src="../../assets/unitoken.png" alt="UT">' .'</span>';
+                                                echo '<button type="submit" class="downloadbtn"><img src="../../assets/download.png" alt="Download"></button>';
+                                                echo '</div>';
+                                                
+                                                echo '</form>';
                                             }
                                         }
                                     }
@@ -244,6 +246,45 @@ $conn = db_connect();
                 </div>
             </div>
         </section>
+        <div class="pfcolumn">
+                <h4>Chi ha acquistato le tue dispense</h4>
+                <div class="pfbox">
+                            <?php
+                                if(isset($_SESSION['user_id'])){
+                                    $query = "
+                                            SELECT u.username, uni.nome AS nomeUni, f.nome AS nomeFacolta, a.data_acquisto, d.titolo, d.prezzo AS prezzoDispensa
+                                            FROM acquisti a, dispense d, utenti u, universita uni, facolta f
+                                            WHERE a.id_dispensa = d.id_dispensa
+                                            AND a.id_utente = u.id_utente
+                                            AND u.id_universita = uni.id_universita
+                                            AND u.id_facolta = f.id_facolta
+                                            AND d.id_utente = {$_SESSION['user_id']}
+                                            ORDER BY a.data_acquisto DESC
+                                    ";
+                                    $ris = mysqli_query($conn, $query);
+                                    if(!$ris){
+                                        echo '<p>errore: ' . mysqli_error($conn) . '</p>';
+                                    }else{
+                                        if(mysqli_num_rows($ris) == 0){
+                                            echo '<p>nessuno ha ancora comprato le tue dispense</p>';
+                                        }else{
+                                            while($riga = mysqli_fetch_assoc($ris)){
+                                                echo '<div class="pfboxrow">';
+                                                echo '<div>';
+                                                echo '<h5>' . $riga['titolo'] . '</h5>';
+                                                echo '<p>' . $riga['username'] . ' da ' . htmlspecialchars($riga['nomeUni']) . ' • ' . htmlspecialchars($riga['nomeFacolta']) . ' | Acquistata in data ' . htmlspecialchars($riga['data_acquisto']) . '</p>';
+                                                echo '</div>';
+                                                echo '<span class="pricebadge1">'.'+'.$riga['prezzoDispensa'].'<img src="../../assets/unitoken.png" alt="UT">' .'</span>';
+                                                echo '</div>';
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    echo '<p>Accedi per visualizzare questa sezione</p>';
+                                }
+                            ?>
+                </div>
+            </div>
 
         <div class="logoutsection">
             <a href="../authentication/backend/logout.php"><button class="exitbtn">→ Esci dall'account</button></a>

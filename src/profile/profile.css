@@ -404,13 +404,51 @@ body {
 .pricebadge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     color: var(--color-yellow-primary);
     font-weight: 700;
     background: rgba(255, 208, 0, 0.15);
-    border: 1px solid rgba(255, 208, 0, 0.35);
-    padding: 6px 10px;
+    border: 1px solid rgba(179, 146, 0, 0.5);
+    width: 70px;
+    height: 30px;
     border-radius: 20px;
+}
+
+.pricebadge1 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: rgb(0, 163, 0);
+    font-weight: 700;
+    border: 1px solid rgba(0, 150, 0, 0.7);;
+    background-color: rgba(0, 255, 0, 0.15);
+    width: 70px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+.pricebadge2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: rgb(192, 0, 0);
+    font-weight: 700;
+    border: 1px solid rgba(150, 0, 0, 0.7);;
+    background-color: rgba(255, 0, 0, 0.17);
+    width: 70px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+.pricebadge1 img {
+    width: 16px;
+}
+
+.pricebadge2 img {
+    width: 16px;
 }
 
 .pricebadge img {
@@ -422,11 +460,16 @@ body {
     color: #fff;
     font-weight: 700;
     font-size: 14px;
-    padding: 10px 16px;
+    padding: 8px 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: 0.3s all ease;
+    margin-left: 10px;
+}
+
+.downloadbtn img {
+    width: 15px;
 }
 
 .downloadbtn:hover {
