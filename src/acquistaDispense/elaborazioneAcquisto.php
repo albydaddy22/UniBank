@@ -7,7 +7,7 @@ if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
 
 require_once __DIR__ . '/../../config.php';
 
-try {
+try{
     $idDispensa = (int)$_POST['id_dispensa'];
     $userId = $_SESSION['user_id'];
     $conn = db_connect();
