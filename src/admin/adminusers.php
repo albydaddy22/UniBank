@@ -35,7 +35,7 @@ session_start();
                             <span><?php echo $initials; ?></span>
                         </div>
                         <span>Ciao, <?php echo $_SESSION['username'] ?></span>
-                        <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                     </div>
                 </li>
             </ul>

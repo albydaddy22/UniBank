@@ -30,12 +30,12 @@ session_start();
                             if(isset($_SESSION['username'])){
                                 $name = trim($_SESSION['username']);
                                 $initials = strtoupper(substr($name,0,1));
-                            }else{ $initials = 'U'; }
+                            }else{$initials = 'U'; }
                             ?>
                             <span><?php echo $initials; ?></span>
                         </div>
                         <span>Ciao, <?php echo $_SESSION['username'] ?></span>
-                        <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                     </div>
                 </li>
             </ul>

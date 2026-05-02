@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../config.php';
+$conn = db_connect();
 ?>
 <!doctype html>
 <html lang="it">
@@ -35,7 +37,7 @@ session_start();
                             <span><?php echo $initials; ?></span>
                         </div>
                         <span>Ciao, <?php echo $_SESSION['username'] ?></span>
-                        <a href="authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
+                        <a href="../authentication/backend/logout.php"><button class="logoutbtn">Logout</button></a>
                     </div>
                 </li>
             </ul>
@@ -55,20 +57,44 @@ session_start();
     <div class="admin-container">
         <section class="admin-stats">
             <div class="stat-card">
-                <span class="stat-label">Utenti totali</span>
-                <span class="stat-value blue">1.248</span>
+                <?php
+                    $query = "SELECT COUNT(*) AS numUtenti FROM utenti";
+                    $ris = mysqli_query($conn,$query);
+                    $riga = mysqli_fetch_assoc($ris);
+                    echo '<span class="stat-label">Utenti totali</span>';
+                    echo '<span class="stat-value blue">'.$riga['numUtenti'].'</span>';
+                ?>               
             </div>
             <div class="stat-card">
-                <span class="stat-label">Dispense pubblicate</span>
-                <span class="stat-value blue">3.741</span>
+                <?php
+                    $query = "SELECT COUNT(*) AS numDispense FROM dispense";
+                    $ris = mysqli_query($conn,$query);
+                    $riga = mysqli_fetch_assoc($ris);
+                    echo '<span class="stat-label">Dispense pubblicate</span>';
+                    echo '<span class="stat-value blue">'.$riga['numDispense'].'</span>';
+                ?>               
             </div>
             <div class="stat-card">
-                <span class="stat-label">Token in circolazione</span>
-                <span class="stat-value yellow">28.430</span>
+                <span class="stat-label">Token totali posseduti dagli utenti</span>
+                <?php
+                    $query = "
+                            SELECT SUM(saldo) AS totale
+                            FROM utenti
+                            WHERE ruolo = 0
+                    ";#utenti ruolo = 0 admin = 1
+                    $ris = mysqli_query($conn,$query);
+                    $riga = mysqli_fetch_assoc($ris);
+                    echo '<span class="stat-value yellow">'.$riga['totale'].'</span>'
+                ?>            
             </div>
             <div class="stat-card">
                 <span class="stat-label">Acquisti totali</span>
-                <span class="stat-value green">847</span>
+                <?php
+                    $query = "SELECT COUNT(*) AS numAcquisti FROM acquisti";
+                    $ris = mysqli_query($conn,$query);
+                    $riga = mysqli_fetch_assoc($ris);
+                    echo '<span class="stat-value green">'.$riga['numAcquisti'].'</span>';
+                ?>   
             </div>
         </section>
 
@@ -150,7 +176,7 @@ session_start();
                             <p>di user • 14 Mar 2026</p>
                         </div>
                         <button class="delete-btn">
-                            <img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">
+                            <img src="../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">
                         </button>
                     </div>
                     <div class="material-row">

@@ -75,8 +75,8 @@ $_SESSION['facolta'] = $record['nome_facolta'];
 
 mysqli_close($connection);
 
-if((int) $user['ruolo'] === 1){
-    header('Location: ../frontend/admin.html');
+if((int)$user['ruolo'] === 1){
+    header('Location: ../../admin/adminpanoramica.php');
     exit;
 }
 
