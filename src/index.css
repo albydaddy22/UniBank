@@ -470,9 +470,9 @@
     padding: 8px 25px;
     border-radius: 5px;
     border: 1px solid red;
-    background-color: rgba(255, 0, 0, 0.3);
+    background-color: rgba(255, 0, 0, 0.15);
     cursor: pointer;
-    color: red;
+    color: #c20000;
     font-weight: 600;
     transition: 0.3s ease;
 }
