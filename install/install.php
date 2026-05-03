@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS utenti(
     ruolo BOOLEAN NOT NULL,
     saldo INT NOT NULL DEFAULT 20 CHECK (saldo >= 0),
     bloccato BOOLEAN NOT NULL DEFAULT 0,
+    data_iscrizione DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_universita INT(11) NOT NULL,
     id_facolta INT(11) NOT NULL,
     CONSTRAINT fk_utente_universita FOREIGN KEY (id_universita) REFERENCES universita(id_universita),
@@ -515,9 +516,9 @@ if((int)$row['tot'] === 0){
     ";
 
     $inserisciDati .= "
-    INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES
-    ('admin', '" . mysqli_real_escape_string($conn, $passHashAdmin) . "', 'admin@unibank.it', 1, 1, 1),
-    ('utente', '" . mysqli_real_escape_string($conn, $passHashUtente) . "', 'utente@email.it', 0, 1, 1);
+    INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta, data_iscrizione) VALUES
+    ('admin', '" . mysqli_real_escape_string($conn, $passHashAdmin) . "', 'admin@unibank.it', 1, 1, 1, NOW()),
+    ('utente', '" . mysqli_real_escape_string($conn, $passHashUtente) . "', 'utente@email.it', 0, 1, 1, NOW());
     ";
 
     $inserisciDati .= "

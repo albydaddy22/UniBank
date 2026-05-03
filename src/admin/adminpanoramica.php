@@ -80,25 +80,68 @@ $conn = db_connect();
             </div>
             <div class="stat-card">
                 <?php
-                    $query = "SELECT COUNT(*) AS numDispense FROM dispense";
+                    $query = "
+                            SELECT COUNT(*) AS numDispenseAttive
+                            FROM utenti u, dispense d
+                            WHERE u.bloccato = 0
+                            AND d.id_utente = u.id_utente
+                    ";
                     $ris = mysqli_query($conn,$query);
                     $riga = mysqli_fetch_assoc($ris);
-                    echo '<span class="stat-label">Dispense pubblicate</span>';
-                    echo '<span class="stat-value blue">'.$riga['numDispense'].'</span>';
-                ?>               
+
+                    #query per vedere quante dispense sono state disattivate a causa di un blocco di un utente
+
+                    $query2 = "
+                            SELECT COUNT(*) AS numBloccate
+                            FROM utenti u, dispense d
+                            WHERE u.bloccato = 1
+                            AND d.id_utente = u.id_utente
+                    ";
+                    $ris2 = mysqli_query($conn,$query2);
+                    $riga2 = mysqli_fetch_assoc($ris2);
+                    $dispTotaliAttive   = $riga['numDispenseAttive']  ?? 0;
+                    $dispBloccate = $riga2['numBloccate'] ?? 0;
+                    echo '<span class="stat-label" id="dispense-label">Dispense pubblicate attive</span>';
+                    echo '<span class="stat-value blue" id="dispense-value"'
+                        .' data-totali="'.$dispTotaliAttive.'"'
+                        .' data-bloccate="'.$dispBloccate.'">'.$dispTotaliAttive.'</span>';
+                ?>
+                <div class="stat-pills" id="dispense-pills">
+                    <button class="stat-pill active" data-target="totali"   data-label="Dispense pubblicate attive">Attive</button>
+                    <button class="stat-pill"        data-target="bloccate" data-label="Dispense da utenti bloccati">Da bloccati</button>
+                </div>
             </div>
             <div class="stat-card">
-                <span class="stat-label">Token totali posseduti dagli utenti</span>
                 <?php
                     $query = "
                             SELECT SUM(saldo) AS totale
                             FROM utenti
                             WHERE ruolo = 0
+                            AND bloccato = 0
                     ";#utenti ruolo = 0 admin = 1
                     $ris = mysqli_query($conn,$query);
                     $riga = mysqli_fetch_assoc($ris);
-                    echo '<span class="stat-value yellow">'.$riga['totale'].'</span>'
-                ?>            
+
+                    #utenti bloccati calcolo 
+                    $query2 = "
+                            SELECT SUM(saldo) AS totale
+                            FROM utenti
+                            WHERE ruolo = 0
+                            AND bloccato = 1
+                    ";
+                    $ris2 = mysqli_query($conn,$query2);
+                    $riga2 = mysqli_fetch_assoc($ris2);
+                    $tokAttivi   = $riga['totale']  ?? 0;
+                    $tokBloccati = $riga2['totale'] ?? 0;
+                    echo '<span class="stat-label" id="token-label">Token utenti attivi</span>';
+                    echo '<span class="stat-value yellow" id="token-value"'
+                        .' data-attivi="'.$tokAttivi.'"'
+                        .' data-bloccati="'.$tokBloccati.'">'.$tokAttivi.'</span>';
+                ?>
+                <div class="stat-pills" id="token-pills">
+                    <button class="stat-pill active" data-target="attivi"   data-label="Token utenti attivi">Attivi</button>
+                    <button class="stat-pill"        data-target="bloccati" data-label="Token utenti bloccati">Bloccati</button>
+                </div>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Acquisti totali</span>
@@ -211,7 +254,7 @@ $conn = db_connect();
         const valueEl = document.getElementById('utenti-value');
         const labelEl = document.getElementById('utenti-label');
         const pills   = document.querySelectorAll('#utenti-pills .stat-pill');
-
+        //pill per utenti admin e totale
         pills.forEach(pill =>{
             pill.addEventListener('click', function(){
                 pills.forEach(p => p.classList.remove('active'));
@@ -230,6 +273,60 @@ $conn = db_connect();
                     labelEl.textContent  = newLabel;
                     valueEl.style.opacity = '1';
                     labelEl.style.opacity = '1';
+                }, 150);
+            });
+        });
+
+        // pill per calcolo token posseduti da utenti attivi e bloccati
+        const tokenValueEl = document.getElementById('token-value');
+        const tokenLabelEl = document.getElementById('token-label');
+        const tokenPills   = document.querySelectorAll('#token-pills .stat-pill');
+
+        tokenPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                tokenPills.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+
+                const target   = this.dataset.target;   // 'attivi'e 'bloccati'
+                const newVal   = tokenValueEl.dataset[target];
+                const newLabel = this.dataset.label;
+
+                tokenValueEl.style.transition = 'opacity 0.15s';
+                tokenLabelEl.style.transition = 'opacity 0.15s';
+                tokenValueEl.style.opacity    = '0';
+                tokenLabelEl.style.opacity    = '0';
+                setTimeout(() => {
+                    tokenValueEl.textContent  = newVal;
+                    tokenLabelEl.textContent  = newLabel;
+                    tokenValueEl.style.opacity = '1';
+                    tokenLabelEl.style.opacity = '1';
+                }, 150);
+            });
+        });
+
+        // pill per dispense totali e da utenti bloccati
+        const dispenseValueEl = document.getElementById('dispense-value');
+        const dispenseLabelEl = document.getElementById('dispense-label');
+        const dispensePills   = document.querySelectorAll('#dispense-pills .stat-pill');
+
+        dispensePills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                dispensePills.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+
+                const target   = this.dataset.target;   // 'totali' e 'bloccate'
+                const newVal   = dispenseValueEl.dataset[target];
+                const newLabel = this.dataset.label;
+
+                dispenseValueEl.style.transition = 'opacity 0.15s';
+                dispenseLabelEl.style.transition = 'opacity 0.15s';
+                dispenseValueEl.style.opacity    = '0';
+                dispenseLabelEl.style.opacity    = '0';
+                setTimeout(() => {
+                    dispenseValueEl.textContent  = newVal;
+                    dispenseLabelEl.textContent  = newLabel;
+                    dispenseValueEl.style.opacity = '1';
+                    dispenseLabelEl.style.opacity = '1';
                 }, 150);
             });
         });
