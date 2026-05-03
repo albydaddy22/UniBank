@@ -48,6 +48,7 @@ CREATE TABLE dispense(
     prezzo INT(4) NOT NULL CHECK (prezzo >= 0),
     percorso_file VARCHAR(255) NOT NULL,
     data_caricamento DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approvata BOOLEAN NOT NULL DEFAULT 0,
     id_utente INT(11) NOT NULL,
     id_materiaperfacolta INT(11) NOT NULL,
     CONSTRAINT fk_dispensa_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente),

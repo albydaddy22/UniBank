@@ -9,6 +9,7 @@ $queryHeader = '
     FROM dispense d, utenti u
     WHERE d.id_utente = u.id_utente
     AND u.bloccato = 0
+    AND d.approvata = 1
     ORDER BY d.data_caricamento DESC
     LIMIT 3
 ';
@@ -23,6 +24,7 @@ $queryHero ='
     AND mpf.id_facolta = f.id_facolta
     AND u.id_universita = uni.id_universita
     AND u.bloccato = 0
+    AND d.approvata = 1
     ORDER BY d.data_caricamento DESC
     LIMIT 4
 ';

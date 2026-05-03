@@ -122,7 +122,7 @@ $conn = db_connect();
             <div class="statcard">
                 <span class="statlabel">Dispense caricate</span>
                 <?php
-                    $query = "SELECT COUNT(*) AS totaleCaricate FROM dispense WHERE id_utente = {$_SESSION['user_id']}";
+                    $query = "SELECT COUNT(*) AS totaleCaricate FROM dispense WHERE id_utente = {$_SESSION['user_id']} AND approvata = 1";
                     $ris = mysqli_query($conn, $query);
                     $dispenseCaricate = mysqli_fetch_assoc($ris);
                     echo '<span class="statvalue">' . htmlspecialchars($dispenseCaricate['totaleCaricate']) . '</span>';
@@ -184,6 +184,7 @@ $conn = db_connect();
                                 WHERE d.id_utente = u.id_utente
                                 AND d.id_materiaperfacolta = m.id_materiaperfacolta
                                 AND d.id_utente = {$_SESSION['user_id']}
+                                AND d.approvata = 1
                         ";
                         $ris = mysqli_query($conn,$query);
                         if(mysqli_num_rows($ris) == 0){

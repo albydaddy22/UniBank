@@ -15,7 +15,7 @@ try{
     $stmt = mysqli_prepare($conn, "
         SELECT id_dispensa, id_utente, prezzo
         FROM dispense
-        WHERE id_dispensa = ?
+        WHERE id_dispensa = ? AND approvata = 1
     ");
 
     if(!$stmt){

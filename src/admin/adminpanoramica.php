@@ -84,30 +84,32 @@ $conn = db_connect();
                             SELECT COUNT(*) AS numDispenseAttive
                             FROM utenti u, dispense d
                             WHERE u.bloccato = 0
+                            AND d.approvata = 1
                             AND d.id_utente = u.id_utente
                     ";
                     $ris = mysqli_query($conn,$query);
                     $riga = mysqli_fetch_assoc($ris);
 
-                    #query per vedere quante dispense sono state disattivate a causa di un blocco di un utente
-
+                    
+                    #query per vedere quante dispense sono state disattivate a causa dei blocchi degli utenti 
                     $query2 = "
                             SELECT COUNT(*) AS numBloccate
                             FROM utenti u, dispense d
                             WHERE u.bloccato = 1
+                            AND d.approvata = 1
                             AND d.id_utente = u.id_utente
                     ";
                     $ris2 = mysqli_query($conn,$query2);
                     $riga2 = mysqli_fetch_assoc($ris2);
                     $dispTotaliAttive   = $riga['numDispenseAttive']  ?? 0;
                     $dispBloccate = $riga2['numBloccate'] ?? 0;
-                    echo '<span class="stat-label" id="dispense-label">Dispense pubblicate attive</span>';
+                    echo '<span class="stat-label" id="dispense-label">Dispense approvate attive</span>';
                     echo '<span class="stat-value blue" id="dispense-value"'
                         .' data-totali="'.$dispTotaliAttive.'"'
                         .' data-bloccate="'.$dispBloccate.'">'.$dispTotaliAttive.'</span>';
                 ?>
                 <div class="stat-pills" id="dispense-pills">
-                    <button class="stat-pill active" data-target="totali"   data-label="Dispense pubblicate attive">Attive</button>
+                    <button class="stat-pill active" data-target="totali"   data-label="Dispense approvate attive">Attive</button>
                     <button class="stat-pill"        data-target="bloccate" data-label="Dispense da utenti bloccati">Da bloccati</button>
                 </div>
             </div>
@@ -211,7 +213,7 @@ $conn = db_connect();
                 </div>
             </div>
             <div class="admin-column">
-                <h4>Materiali recenti</h4>
+                <h4>Materiali approvati recentemente</h4>
                 <div class="admin-box">
                     <?php
                         $query = "
@@ -219,6 +221,7 @@ $conn = db_connect();
                             FROM dispense,utenti
                             WHERE utenti.id_utente = dispense.id_utente
                             AND utenti.bloccato = 0
+                            AND dispense.approvata = 1 
                             ORDER BY data_caricamento DESC
                             LIMIT 5
                         ";
@@ -237,8 +240,8 @@ $conn = db_connect();
                             echo '</div>';  
                         }
                         if($cont == 0){
-                            echo '<div class="material-info">';;
-                            echo '<p>Non sono state ancora caricate dispense</p>';
+                            echo '<div class="material-info">';
+                            echo '<p>Non sono state ancora approvate dispense</p>';
                             echo '</div>';
                         }
                     ?>
