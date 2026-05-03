@@ -133,14 +133,14 @@ $conn = db_connect();
                     $riga2 = mysqli_fetch_assoc($ris2);
                     $tokAttivi   = $riga['totale']  ?? 0;
                     $tokBloccati = $riga2['totale'] ?? 0;
-                    echo '<span class="stat-label" id="token-label">Token utenti attivi</span>';
+                    echo '<span class="stat-label" id="token-label">Token posseduti da utenti attivi</span>';
                     echo '<span class="stat-value yellow" id="token-value"'
                         .' data-attivi="'.$tokAttivi.'"'
                         .' data-bloccati="'.$tokBloccati.'">'.$tokAttivi.'</span>';
                 ?>
                 <div class="stat-pills" id="token-pills">
-                    <button class="stat-pill active" data-target="attivi"   data-label="Token utenti attivi">Attivi</button>
-                    <button class="stat-pill"        data-target="bloccati" data-label="Token utenti bloccati">Bloccati</button>
+                    <button class="stat-pill active" data-target="attivi"   data-label="Token posseduti da utenti attivi">Attivi</button>
+                    <button class="stat-pill"        data-target="bloccati" data-label="Token posseduti da utenti bloccati">Bloccati</button>
                 </div>
             </div>
             <div class="stat-card">
@@ -163,6 +163,7 @@ $conn = db_connect();
                             <tr>
                                 <th>UTENTE</th>
                                 <th>STATO</th>
+                                <th>RUOLO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -175,25 +176,30 @@ $conn = db_connect();
                                 ";
                                 $ris = mysqli_query($conn,$query);
                                 while($riga = mysqli_fetch_assoc($ris)){
-                                    if($riga['ruolo'] == 0){
-                                        echo '<tr>';
-                                        echo    '<td>';
-                                        echo        '<div class="user-info">';
-                                        echo        ' <span class="user-name">'.$riga['username'].'</span>';
-                                        echo        ' <span class="user-email">'.$riga['email'].'</span>';
-                                        echo        ' <span class="user-email">'.$riga['uniNome'].'</span>';
-                                        echo        ' <span class="user-email">'.$riga['nomeFacolta'].'</span>';
-                                        echo        '</div>';
-                                        echo    '</td>';
-                                        echo    '<td>';
-                                        if($riga['bloccato'] == 0){
-                                            echo '<span class="status status-active">Attivo</span>';
-                                        }else{
-                                            echo '<span class="status status-blocked">Bloccato</span>';
-                                        }
-                                        echo    '</td>';
-                                        echo '</tr>';
+                                    echo '<tr>';
+                                    echo    '<td>';
+                                    echo        '<div class="user-info">';
+                                    echo        ' <span class="user-name">'.'•'.$riga['username'].'</span>';
+                                    echo        ' <span class="user-email">'.'•'.$riga['email'].'</span>';
+                                    echo        ' <span class="user-email">'.'•'.$riga['uniNome'].'</span>';
+                                    echo        ' <span class="user-email">'.'•'.$riga['nomeFacolta'].'</span>';
+                                    echo        '</div>';
+                                    echo    '</td>';
+                                    echo    '<td>';
+                                    if($riga['bloccato'] == 0){
+                                        echo '<span class="status status-active">Attivo</span>';
+                                    }else{
+                                        echo '<span class="status status-blocked">Bloccato</span>';
                                     }
+                                    echo    '</td>';
+                                    echo    '<td>';
+                                    if($riga['ruolo'] == 0){
+                                        echo '<span class="status status-user">Utente</span>';
+                                    }else{
+                                        echo '<span class="status status-admin">Admin</span>';
+                                    }
+                                    echo    '</td>';
+                                    echo '</tr>';
                                 }
                             ?>
                         </tbody>
@@ -222,7 +228,7 @@ $conn = db_connect();
                             echo        '<p>di '. $riga['username'] .' • '. substr($riga['data_caricamento'],0,10) . '</p>';
                             echo    '</div>';
                             echo     '<button class="delete-btn">';
-                            echo        '<img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">';
+                            echo        '<a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);"></a>';
                             echo     '</button>';
                             echo '</div>';  
                         }

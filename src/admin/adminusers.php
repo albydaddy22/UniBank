@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../config.php';
+$conn = db_connect();
 ?>
 <!doctype html>
 <html lang="it">
@@ -56,7 +58,7 @@ session_start();
         <section class="admin-header-actions">
             <h4>Gestione Utenti</h4>
             <div class="search-bar">
-                <input type="text" placeholder="Cerca utente per nome o email...">
+                <input type="text" placeholder="Cerca utente per username o email">
                 <button class="search-btn">Cerca</button>
             </div>
         </section>
@@ -67,6 +69,7 @@ session_start();
                     <thead>
                         <tr>
                             <th>UTENTE</th>
+                            <th>RUOLO</th>
                             <th>DATA ISCRIZIONE</th>
                             <th>TOKEN</th>
                             <th>STATO</th>
@@ -74,74 +77,52 @@ session_start();
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <span class="user-name">user</span>
-                                    <span class="user-email">user@esempio.it</span>
-                                </div>
-                            </td>
-                            <td>12/03/2026</td>
-                            <td><span class="token-count">450</span></td>
-                            <td><span class="status status-active">Attivo</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn">Modifica</button>
-                                    <button class="block-btn">Blocca</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <span class="user-name">user</span>
-                                    <span class="user-email">user@email.com</span>
-                                </div>
-                            </td>
-                            <td>05/03/2026</td>
-                            <td><span class="token-count">35</span></td>
-                            <td><span class="status status-active">Attivo</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn">Modifica</button>
-                                    <button class="block-btn">Blocca</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <span class="user-name">user</span>
-                                    <span class="user-email">user@email.com</span>
-                                </div>
-                            </td>
-                            <td>01/03/2026</td>
-                            <td><span class="token-count">0</span></td>
-                            <td><span class="status status-blocked">Bloccato</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="unblock-btn">Sblocca</button>
-                                    <button class="edit-btn">Modifica</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <span class="user-name">user</span>
-                                    <span class="user-email">user@esempio.com</span>
-                                </div>
-                            </td>
-                            <td>25/02/2026</td>
-                            <td><span class="token-count">1250</span></td>
-                            <td><span class="status status-active">Attivo</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn">Modifica</button>
-                                    <button class="block-btn">Blocca</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php
+                            $query = "SELECT * FROM utenti";
+                            $ris = mysqli_query($conn, $query);
+                            while($riga = mysqli_fetch_assoc($ris)){
+                                echo '<tr>';
+                                echo    '<td>';
+                                echo        '<div class="user-info">';
+                                echo            '<span class="user-name">'.$riga['username'].'</span>';
+                                echo            '<span class="user-email">'.$riga['email'].'</span>';
+                                echo        '</div>';
+                                echo    '</td>';
+                                echo    '<td>';
+                                if($riga['ruolo'] == 0){
+                                    echo '<span class="status status-user">Utente</span>';
+                                }else{
+                                    echo '<span class="status status-admin">Admin</span>';
+                                }
+                                echo    '</td>';
+                                echo    '<td>' . substr($riga['data_iscrizione'], 0, 10) . '</td>';
+                                echo    '<td><span class="token-count">' . ($riga['saldo'] ?? 0) . '</span></td>';
+                                echo    '<td>';
+                                if($riga['bloccato'] == 0){
+                                    echo '<span class="status status-active">Attivo</span>';
+                                }else{
+                                    echo '<span class="status status-blocked">Bloccato</span>';
+                                }
+                                echo    '</td>';
+                                echo    '<td>';
+                                echo        '<div class="action-buttons">';
+                                echo            '<button class="edit-btn">Modifica</button>';
+                                if($riga['bloccato'] == 0){
+                                    echo        '<button class="block-btn">Blocca</button>';
+                                }else{
+                                    echo        '<button class="unblock-btn">Sblocca</button>';
+                                }
+                                if($riga['ruolo'] == 0){
+                                    echo        '<button class="approve-btn">Promuovi</button>';
+                                }else{
+                                    echo        '<button class="view-btn">Retrocedi</button>';
+                                }
+                                echo            '<button class="delete-btn-table">Elimina</button>';
+                                echo        '</div>';
+                                echo    '</td>';
+                                echo '</tr>';
+                            }
+                        ?>
                     </tbody>
                 </table>
             </div>
