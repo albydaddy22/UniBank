@@ -214,6 +214,7 @@ $conn = db_connect();
                                               WHERE a.id_utente = {$_SESSION['user_id']}
                                               AND a.id_dispensa = d.id_dispensa
                                               AND d.id_utente = u.id_utente
+                                              AND u.bloccato = 0
                                               ORDER BY a.data_acquisto DESC";
                                               
                                     $ris = mysqli_query($conn, $query);
@@ -260,6 +261,7 @@ $conn = db_connect();
                                             AND a.id_utente = u.id_utente
                                             AND u.id_universita = uni.id_universita
                                             AND u.id_facolta = f.id_facolta
+                                            AND u.bloccato = 0
                                             AND d.id_utente = {$_SESSION['user_id']}
                                             ORDER BY a.data_acquisto DESC
                                     ";

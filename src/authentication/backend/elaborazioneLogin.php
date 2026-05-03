@@ -33,7 +33,7 @@ if(!empty($errors)){
 
 $connection = db_connect();
 
-$query = 'SELECT id_utente, username, password, ruolo, email FROM utenti WHERE email = ? LIMIT 1';
+$query = 'SELECT id_utente, username, password, ruolo, email, bloccato FROM utenti WHERE email = ? LIMIT 1';
 $stmt = mysqli_prepare($connection, $query);
 if(!$stmt){
     die('Errore nella preparazione della query: ' . mysqli_error($connection));
@@ -47,6 +47,13 @@ mysqli_stmt_close($stmt);
 
 if(!$user || !password_verify($password, $user['password'])){
     echo '<p style="color:red;">Email o password errate.</p>';
+    echo '<p><a href="../frontend/login.php">Torna al login</a></p>';
+    mysqli_close($connection);
+    exit;
+}
+
+if((int)$user['bloccato'] === 1){
+    echo '<p style="color:red;">Il tuo account è stato bloccato dall\'amministratore. Contatta il supporto per maggiori informazioni.</p>';
     echo '<p><a href="../frontend/login.php">Torna al login</a></p>';
     mysqli_close($connection);
     exit;

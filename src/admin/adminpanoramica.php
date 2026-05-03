@@ -61,9 +61,22 @@ $conn = db_connect();
                     $query = "SELECT COUNT(*) AS numUtenti FROM utenti";
                     $ris = mysqli_query($conn,$query);
                     $riga = mysqli_fetch_assoc($ris);
-                    echo '<span class="stat-label">Utenti totali</span>';
-                    echo '<span class="stat-value blue">'.$riga['numUtenti'].'</span>';
-                ?>               
+                    $query2 = "SELECT COUNT(*) AS numAdmin FROM utenti WHERE ruolo = 1";#utenti ruolo = 0 admin = 1, 
+                    #conto gli admin cosi poi faccio totale utenti - num ADMIN cosi da avere un numero preciso di utenti che non siano admin
+                    $ris2 = mysqli_query($conn,$query2);
+                    $riga2 = mysqli_fetch_assoc($ris2);
+                    $numUtentiNoAdmin = $riga['numUtenti'] - $riga2['numAdmin'];
+                    echo '<span class="stat-label" id="utenti-label">Numero utenti</span>';
+                    echo '<span class="stat-value blue" id="utenti-value"
+                              data-utenti="'.$numUtentiNoAdmin.'"
+                              data-admin="'.$riga2['numAdmin'].'"
+                              data-totale="'.$riga['numUtenti'].'">'.$numUtentiNoAdmin.'</span>';
+                ?>
+                <div class="stat-pills" id="utenti-pills">
+                    <button class="stat-pill active" data-target="utenti" data-label="Numero utenti">Utenti</button>
+                    <button class="stat-pill"        data-target="admin"  data-label="Numero admin">Admin</button>
+                    <button class="stat-pill"        data-target="totale" data-label="Numero totale utenti + admin">Totale</button>
+                </div>
             </div>
             <div class="stat-card">
                 <?php
@@ -110,50 +123,36 @@ $conn = db_connect();
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <span class="user-name">user</span>
-                                        <span class="user-email">esempio@mail.com</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status status-active">Attivo</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <span class="user-name">user</span>
-                                        <span class="user-email">esempio@mail.com</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status status-active">Attivo</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <span class="user-name">user</span>
-                                        <span class="user-email">esempio@mail.com</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status status-active">Attivo</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <span class="user-name">user</span>
-                                        <span class="user-email">esempio@mail.com</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status status-blocked">Bloccato</span>
-                                </td>
-                            </tr>
+                            <?php
+                                $query = "
+                                    SELECT username,email,bloccato,ruolo,uni.nome AS uniNome, f.nome AS nomeFacolta
+                                    FROM utenti,universita uni, facolta f
+                                    WHERE utenti.id_universita = uni.id_universita
+                                    AND utenti.id_facolta = f.id_facolta
+                                ";
+                                $ris = mysqli_query($conn,$query);
+                                while($riga = mysqli_fetch_assoc($ris)){
+                                    if($riga['ruolo'] == 0){
+                                        echo '<tr>';
+                                        echo    '<td>';
+                                        echo        '<div class="user-info">';
+                                        echo        ' <span class="user-name">'.$riga['username'].'</span>';
+                                        echo        ' <span class="user-email">'.$riga['email'].'</span>';
+                                        echo        ' <span class="user-email">'.$riga['uniNome'].'</span>';
+                                        echo        ' <span class="user-email">'.$riga['nomeFacolta'].'</span>';
+                                        echo        '</div>';
+                                        echo    '</td>';
+                                        echo    '<td>';
+                                        if($riga['bloccato'] == 0){
+                                            echo '<span class="status status-active">Attivo</span>';
+                                        }else{
+                                            echo '<span class="status status-blocked">Bloccato</span>';
+                                        }
+                                        echo    '</td>';
+                                        echo '</tr>';
+                                    }
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -161,33 +160,35 @@ $conn = db_connect();
             <div class="admin-column">
                 <h4>Materiali recenti</h4>
                 <div class="admin-box">
-                    <div class="material-row">
-                        <div class="material-info">
-                            <h5>Dispensa 1</h5>
-                            <p>di user • 15 Mar 2026</p>
-                        </div>
-                        <button class="delete-btn">
-                            <img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">
-                        </button>
-                    </div>
-                    <div class="material-row">
-                        <div class="material-info">
-                            <h5>Dispensa 2</h5>
-                            <p>di user • 14 Mar 2026</p>
-                        </div>
-                        <button class="delete-btn">
-                            <img src="../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">
-                        </button>
-                    </div>
-                    <div class="material-row">
-                        <div class="material-info">
-                            <h5>Dispensa 3</h5>
-                            <p>di user • 13 Mar 2026</p>
-                        </div>
-                        <button class="delete-btn">
-                            <img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">
-                        </button>
-                    </div>
+                    <?php
+                        $query = "
+                            SELECT * 
+                            FROM dispense,utenti
+                            WHERE utenti.id_utente = dispense.id_utente
+                            AND utenti.bloccato = 0
+                            ORDER BY data_caricamento DESC
+                            LIMIT 5
+                        ";
+                        $ris = mysqli_query($conn,$query);
+                        $cont = 0;
+                        while($riga = mysqli_fetch_assoc($ris)){
+                            $cont++;
+                            echo '<div class="material-row">';
+                            echo    '<div class="material-info">';
+                            echo        '<h5>'.$riga['titolo'].'<h5>';
+                            echo        '<p>di '. $riga['username'] .' • '. substr($riga['data_caricamento'],0,10) . '</p>';
+                            echo    '</div>';
+                            echo     '<button class="delete-btn">';
+                            echo        '<img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);">';
+                            echo     '</button>';
+                            echo '</div>';  
+                        }
+                        if($cont == 0){
+                            echo '<div class="material-info">';;
+                            echo '<p>Non sono state ancora caricate dispense</p>';
+                            echo '</div>';
+                        }
+                    ?>
                 </div>
             </div>
         </section>
@@ -206,6 +207,32 @@ $conn = db_connect();
         }
         ombraNavbar();
         window.addEventListener('scroll', ombraNavbar);
+
+        const valueEl = document.getElementById('utenti-value');
+        const labelEl = document.getElementById('utenti-label');
+        const pills   = document.querySelectorAll('#utenti-pills .stat-pill');
+
+        pills.forEach(pill =>{
+            pill.addEventListener('click', function(){
+                pills.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+
+                const target   = this.dataset.target;  // 'utenti' 'admin' 'totale'
+                const newVal   = valueEl.dataset[target];
+                const newLabel = this.dataset.label;
+
+                valueEl.style.transition = 'opacity 0.15s';
+                labelEl.style.transition = 'opacity 0.15s';
+                valueEl.style.opacity    = '0';
+                labelEl.style.opacity    = '0';
+                setTimeout(() =>{
+                    valueEl.textContent  = newVal;
+                    labelEl.textContent  = newLabel;
+                    valueEl.style.opacity = '1';
+                    labelEl.style.opacity = '1';
+                }, 150);
+            });
+        });
     });
 </script>
 </body>

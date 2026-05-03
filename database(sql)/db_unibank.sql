@@ -31,7 +31,8 @@ CREATE TABLE utenti(
     username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    ruolo BOOLEAN NOT NULL,
+    ruolo BOOLEAN NOT NULL, --1 admin 0 utente normale
+    bloccato BOOLEAN NOT NULL DEFAULT 0, --0 non bloccato 1 bloccato
     saldo INT NOT NULL DEFAULT 20 CHECK (saldo >= 0), --saldo iniziale a 20 per dare la possibilita di acquistare almeno una dispensa
     id_universita INT(11) NOT NULL,
     id_facolta INT(11) NOT NULL,

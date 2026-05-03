@@ -88,7 +88,7 @@ body {
     width: 15px;
 }
 
-.profileicon:hover + .userpopup {
+.profileicon:hover+.userpopup {
     opacity: 1;
     visibility: visible;
 }
@@ -190,7 +190,7 @@ body {
 .admin-tabs {
     background-color: #fff;
     width: 100%;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center;
 }
@@ -248,13 +248,13 @@ body {
 
 .stat-card {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .stat-label {
@@ -294,10 +294,10 @@ body {
 
 .admin-box {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .admin-box.no-padding {
@@ -317,12 +317,12 @@ body {
     color: #6b7280;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .admin-table td {
     padding: 15px 20px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .admin-table tr:last-child td {
@@ -373,7 +373,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .material-row:last-child {
@@ -397,7 +397,7 @@ body {
 }
 
 .delete-btn {
-    background: transparent;
+    background: blue;
     border: none;
     cursor: pointer;
     padding: 5px;
@@ -428,7 +428,7 @@ body {
 .search-bar input {
     padding: 10px 15px;
     border-radius: 8px;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     width: 300px;
     font-size: 14px;
 }
@@ -468,7 +468,7 @@ body {
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     transition: 0.3s;
 }
 
@@ -476,26 +476,31 @@ body {
     background-color: #f3f4f6;
     color: #374151;
 }
+
 .block-btn {
     background-color: #fee2e2;
     color: #ef4444;
     border-color: #fca5a5 !important;
 }
+
 .approve-btn {
     background-color: #dcfce7;
     color: #166534;
     border-color: #86efac !important;
 }
+
 .unblock-btn {
     background-color: #dcfce7;
     color: #166534;
     border-color: #86efac !important;
 }
+
 .view-btn {
     background-color: #e0f2fe;
     color: #0369a1;
     border-color: #7dd3fc !important;
 }
+
 .delete-btn-table {
     background-color: #fee2e2;
     color: #ef4444;
@@ -579,7 +584,7 @@ body {
 
 .activity-list li {
     padding: 12px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     font-size: 14px;
     color: #4b5563;
 }
@@ -596,6 +601,7 @@ body {
     .admin-stats {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .admin-content {
         grid-template-columns: 1fr;
     }
@@ -605,10 +611,42 @@ body {
     .admin-stats {
         grid-template-columns: 1fr;
     }
+
     .tabs-container {
         overflow-x: auto;
     }
+
     .tab-item {
         white-space: nowrap;
     }
+}
+
+.stat-pills {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.stat-pill {
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    font-family: Raleway, sans-serif;
+}
+
+.stat-pill:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.stat-pill.active {
+    background: var(--color-blue-background);
+    color: #fff;
+    border-color: var(--color-blue-background);
 }

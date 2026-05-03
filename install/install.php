@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS utenti(
     email VARCHAR(255) UNIQUE NOT NULL,
     ruolo BOOLEAN NOT NULL,
     saldo INT NOT NULL DEFAULT 20 CHECK (saldo >= 0),
+    bloccato BOOLEAN NOT NULL DEFAULT 0,
     id_universita INT(11) NOT NULL,
     id_facolta INT(11) NOT NULL,
     CONSTRAINT fk_utente_universita FOREIGN KEY (id_universita) REFERENCES universita(id_universita),
