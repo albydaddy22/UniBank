@@ -169,7 +169,7 @@ $conn = db_connect();
                         <tbody>
                             <?php
                                 $query = "
-                                    SELECT username,email,bloccato,ruolo,uni.nome AS uniNome, f.nome AS nomeFacolta
+                                    SELECT username,email,bloccato,ruolo,uni.nome AS uniNome, f.nome AS nomeFacolta,utenti.id_utente AS id
                                     FROM utenti,universita uni, facolta f
                                     WHERE utenti.id_universita = uni.id_universita
                                     AND utenti.id_facolta = f.id_facolta
@@ -179,7 +179,11 @@ $conn = db_connect();
                                     echo '<tr>';
                                     echo    '<td>';
                                     echo        '<div class="user-info">';
-                                    echo        ' <span class="user-name">'.'•'.$riga['username'].'</span>';
+                                    if($riga['id'] == $_SESSION['user_id']){
+                                        echo    ' <span class="user-name">'.'•'.$riga['username'].'(tu)'.'</span>';
+                                    }else{
+                                        echo    ' <span class="user-name">'.'•'.$riga['username'].'</span>';
+                                    }
                                     echo        ' <span class="user-email">'.'•'.$riga['email'].'</span>';
                                     echo        ' <span class="user-email">'.'•'.$riga['uniNome'].'</span>';
                                     echo        ' <span class="user-email">'.'•'.$riga['nomeFacolta'].'</span>';
