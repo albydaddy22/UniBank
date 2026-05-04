@@ -102,6 +102,25 @@ try{
     $insertResult = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
+    if(!$insertResult){
+        throw new Exception("Errore durante la registrazione dell'acquisto: " . mysqli_error($conn));
+    }
+
+    $stmt = mysqli_prepare($conn, "
+        UPDATE utenti
+        SET saldo = saldo + ?
+        WHERE id_utente = ?
+    ");
+    
+    $uploaderId = $dispensa['id_utente'];
+    mysqli_stmt_bind_param($stmt, "di", $prezzo, $uploaderId);
+    $updateUploaderResult = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    if(!$updateUploaderResult){
+        throw new Exception("Errore nell'aggiornamento del saldo del venditore: " . mysqli_error($conn));
+    }
+
 
     mysqli_commit($conn);
     $_SESSION['comprato'] = true;

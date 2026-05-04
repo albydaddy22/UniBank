@@ -4,7 +4,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'unibankdatabase');
 
-define('GEMINI_API_KEY', 'AIzaSyCcKaQ43yr2WgLU9YujwIYW7DZSI6Scsmw');
+define('GEMINI_API_KEY', 'AIzaSyC8-FNIdGmIVTwcEujN5gPHN1uTxYHdtq0');
 
 function db_connect() {
     $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);

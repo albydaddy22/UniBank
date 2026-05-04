@@ -57,10 +57,35 @@ $conn = db_connect();
     <div class="admin-container">
         <section class="admin-header-actions">
             <h4>Gestione Materiali</h4>
-            <div class="search-bar">
-                <input type="text" placeholder="Cerca materiale per titolo o autore...">
-                <button class="search-btn">Cerca</button>
-            </div>
+            <form method="GET" action="adminmateriali.php" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin: 0;">
+                <div class="search-bar" style="margin: 0;">
+                    <?php 
+                    $search_val = "";
+                    if(isset($_GET['search'])){
+                        $search_val = htmlspecialchars($_GET['search']);
+                    }
+                    ?>
+                    <input type="text" name="search" placeholder="Cerca materiale per titolo o autore..." value="<?php echo $search_val; ?>">
+                    <button type="submit" class="search-btn">Cerca</button>
+                </div>
+                <div class="sort-bar" style="display: flex; gap: 10px; align-items: center;">
+                    <?php
+                    $current_sort = 'data_desc';
+                    if(isset($_GET['sort'])){
+                        $current_sort = $_GET['sort'];
+                    }
+                    ?>
+                    <select name="sort" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 14px; background-color: #f9fafb; outline: none; color: #4b5563; cursor: pointer;">
+                        <option value="data_desc" <?php if($current_sort == 'data_desc') echo 'selected'; ?>>Data: Più recenti</option>
+                        <option value="data_asc" <?php if($current_sort == 'data_asc') echo 'selected'; ?>>Data: Meno recenti</option>
+                        <option value="download_desc" <?php if($current_sort == 'download_desc') echo 'selected'; ?>>Downloads: Decrescente</option>
+                        <option value="download_asc" <?php if($current_sort == 'download_asc') echo 'selected'; ?>>Downloads: Crescente</option>
+                        <option value="revisione" <?php if($current_sort == 'revisione') echo 'selected'; ?>>Stato: Prima in revisione</option>
+                        <option value="approvata" <?php if($current_sort == 'approvata') echo 'selected'; ?>>Stato: Prima approvate</option>
+                    </select>
+                    <button type="submit" class="search-btn">Applica Filtri</button>
+                </div>
+            </form>
         </section>
 
         <section class="admin-content-full">
@@ -83,8 +108,34 @@ $conn = db_connect();
                                            (SELECT COUNT(*) FROM acquisti WHERE id_dispensa = d.id_dispensa) AS numDownloads
                                     FROM dispense d, facolta f, utenti u
                                     WHERE d.id_utente = u.id_utente
-                                    AND u.id_facolta = f.id_facolta
+                                    AND u.id_facolta = f.id_facolta 
                             ";
+                            
+                            if(isset($_GET['search']) && $_GET['search'] != ''){
+                                $search = mysqli_real_escape_string($conn, trim($_GET['search']));
+                                $query .= " AND (d.titolo LIKE '%$search%' OR u.username LIKE '%$search%')";
+                            }
+
+                            if(isset($_GET['sort'])){
+                                $sort = $_GET['sort'];
+                                if($sort == 'data_asc'){
+                                    $query .= " ORDER BY d.data_caricamento ASC";
+                                }else if($sort == 'download_desc'){
+                                    $query .= " ORDER BY numDownloads DESC";
+                                }else if($sort == 'download_asc'){
+                                    $query .= " ORDER BY numDownloads ASC";
+                                }else if($sort == 'revisione'){
+                                    $query .= " ORDER BY d.approvata ASC, d.data_caricamento DESC";
+                                }else if($sort == 'approvata'){
+                                    $query .= " ORDER BY d.approvata DESC, d.data_caricamento DESC";
+                                }
+                                else{
+                                    $query .= " ORDER BY d.data_caricamento DESC";
+                                }
+                            }else{
+                                $query .= " ORDER BY d.data_caricamento DESC";
+                            }
+
                             $ris = mysqli_query($conn, $query);
                             while($riga = mysqli_fetch_assoc($ris)){
                                 $data = substr($riga['data_caricamento'], 0, 10);
