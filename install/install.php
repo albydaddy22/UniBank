@@ -552,6 +552,7 @@ $configContent .= "define('DB_HOST', " . var_export($dbHost, true) . ");\n";
 $configContent .= "define('DB_USER', " . var_export($dbUser, true) . ");\n";
 $configContent .= "define('DB_PASS', " . var_export($dbPassword, true) . ");\n";
 $configContent .= "define('DB_NAME', " . var_export($databaseName, true) . ");\n\n";
+$configContent .= "define('GEMINI_API_KEY', 'AIzaSyCcKaQ43yr2WgLU9YujwIYW7DZSI6Scsmw');\n\n";
 $configContent .= "function db_connect() {\n";
 $configContent .= "    \$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);\n";
 $configContent .= "    if (!\$conn) {\n";

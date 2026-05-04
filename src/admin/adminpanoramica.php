@@ -101,16 +101,28 @@ $conn = db_connect();
                     ";
                     $ris2 = mysqli_query($conn,$query2);
                     $riga2 = mysqli_fetch_assoc($ris2);
+                    $query3 = "
+                            SELECT COUNT(*) AS inAttesa
+                            FROM utenti u, dispense d
+                            WHERE u.bloccato = 0
+                            AND d.approvata = 0
+                            AND d.id_utente = u.id_utente
+                    ";
+                    $ris3 = mysqli_query($conn,$query3);
+                    $riga3 = mysqli_fetch_assoc($ris3);
                     $dispTotaliAttive   = $riga['numDispenseAttive']  ?? 0;
                     $dispBloccate = $riga2['numBloccate'] ?? 0;
+                    $dispInAttesa = $riga3['inAttesa'] ?? 0;
                     echo '<span class="stat-label" id="dispense-label">Dispense approvate attive</span>';
                     echo '<span class="stat-value blue" id="dispense-value"'
                         .' data-totali="'.$dispTotaliAttive.'"'
-                        .' data-bloccate="'.$dispBloccate.'">'.$dispTotaliAttive.'</span>';
+                        .' data-bloccate="'.$dispBloccate.'"'
+                        .' data-inattesa="'.$dispInAttesa.'">'.$dispTotaliAttive.'</span>';
                 ?>
                 <div class="stat-pills" id="dispense-pills">
                     <button class="stat-pill active" data-target="totali"   data-label="Dispense approvate attive">Attive</button>
                     <button class="stat-pill"        data-target="bloccate" data-label="Dispense da utenti bloccati">Da bloccati</button>
+                    <button class="stat-pill"        data-target="inattesa" data-label="Dispense in attesa di approvazione">In attesa</button>
                 </div>
             </div>
             <div class="stat-card">

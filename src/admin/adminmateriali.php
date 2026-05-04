@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../config.php';
+$conn = db_connect();
 ?>
 <!doctype html>
 <html lang="it">
@@ -69,85 +71,62 @@ session_start();
                             <th>TITOLO</th>
                             <th>AUTORE</th>
                             <th>DATA CARICAMENTO</th>
-                            <th>DOWNLOADS</th>
+                            <th>ACQUISTI</th>
                             <th>STATO</th>
                             <th>AZIONI</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <div class="material-info-table">
-                                    <span class="material-title">Nome Dispensa</span>
-                                    <span class="material-faculty">Facolta</span>
-                                </div>
-                            </td>
-                            <td>Peter Drum</td>
-                            <td>15/03/2026</td>
-                            <td><span class="download-count">128</span></td>
-                            <td><span class="status status-active">Approvato</span></td> <!-- devi cambiare oltre al testo (approvato, in revisione ecc..) anche le classi (class="")-->
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="view-btn">Vedi</button>
-                                    <button class="delete-btn-table">Elimina</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="material-info-table">
-                                    <span class="material-title">Nome Dispensa</span>
-                                    <span class="material-faculty">Facolta</span>
-                                </div>
-                            </td>
-                            <td>Elena Lombardi</td>
-                            <td>14/03/2026</td>
-                            <td><span class="download-count">45</span></td>
-                            <td><span class="status status-active">Approvato</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="view-btn">Vedi</button>
-                                    <button class="delete-btn-table">Elimina</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="material-info-table">
-                                    <span class="material-title">Nome Dispensa</span>
-                                    <span class="material-faculty">Facolta</span>
-                                </div>
-                            </td>
-                            <td>Nicola Rendina</td>
-                            <td>13/03/2026</td>
-                            <td><span class="download-count">0</span></td>
-                            <td><span class="status status-pending">In revisione</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="approve-btn">Approva</button>
-                                    <button class="view-btn">Vedi</button>
-                                    <button class="delete-btn-table">Elimina</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="material-info-table">
-                                    <span class="material-title">Nome Dispensa</span>
-                                    <span class="material-faculty">Facolta</span>
-                                </div>
-                            </td>
-                            <td>Mamma</td>
-                            <td>10/03/2026</td>
-                            <td><span class="download-count">210</span></td>
-                            <td><span class="status status-active">Approvato</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="view-btn">Vedi</button>
-                                    <button class="delete-btn-table">Elimina</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php
+                            $query = "
+                                    SELECT d.id_dispensa, d.titolo, d.data_caricamento, d.approvata, f.nome AS nomeFacolta, u.username AS nomeUser, u.bloccato,
+                                           (SELECT COUNT(*) FROM acquisti WHERE id_dispensa = d.id_dispensa) AS numDownloads
+                                    FROM dispense d, facolta f, utenti u
+                                    WHERE d.id_utente = u.id_utente
+                                    AND u.id_facolta = f.id_facolta
+                            ";
+                            $ris = mysqli_query($conn, $query);
+                            while($riga = mysqli_fetch_assoc($ris)){
+                                $data = substr($riga['data_caricamento'], 0, 10);
+                                $downloads = $riga['numDownloads'] ?? 0;
+                                
+                                echo '<tr>';
+                                echo '    <td>';
+                                echo '        <div class="material-info-table">';
+                                echo '            <span class="material-title">'.$riga['titolo'].'</span>';
+                                echo '            <span class="material-faculty">'.$riga['nomeFacolta'].'</span>';
+                                echo '        </div>';
+                                echo '    </td>';
+                                echo '    <td>'.$riga['nomeUser'].'</td>';
+                                echo '    <td>'.$data.'</td>';
+                                echo '    <td><span class="download-count">'.$downloads.'</span></td>';
+                                
+                                if($riga['approvata'] == 0 && $riga['bloccato'] == 0){
+                                    echo '<td><span class="status status-pending">In revisione</span></td>';
+                                    echo '<td>';
+                                    echo '    <div class="action-buttons">';
+                                    echo '        <a href="funzioniAdmin/approvaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="approve-btn">Approva</button></a>';
+                                    echo '        <a href="funzioniAdmin/valutaDispensaAI.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn" style="background-color: #8a2be2; border-color: #8a2be2;">Valuta AI</button></a>';
+                                    echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
+                                    echo '        <a href="funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'" onclick="return confirm(\'Sei sicuro di voler eliminare questa dispensa? L\\\'azione non è reversibile.\')"><button class="delete-btn-table">Elimina</button></a>';
+                                    echo '    </div>';
+                                    echo '</td>';
+                                    echo '</tr>';
+                                    continue;
+                                }else if($riga['approvata'] == 1 && $riga['bloccato'] == 0){
+                                    echo '<td><span class="status status-active">Approvato</span></td>';
+                                }else{
+                                    echo '<td><span class="status status-blocked">Bloccata</span></td>';
+                                }
+                                echo '    <td>';
+                                echo '        <div class="action-buttons">';
+                                echo '            <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
+                                echo '            <a href="funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'" onclick="return confirm(\'Sei sicuro di voler eliminare questa dispensa? L\\\'azione non è reversibile.\')"><button class="delete-btn-table">Elimina</button></a>';
+                                echo '        </div>';
+                                echo '    </td>';
+                                echo '</tr>';
+                            }
+                        ?>
                     </tbody>
                 </table>
             </div>

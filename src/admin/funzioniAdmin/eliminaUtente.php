@@ -26,5 +26,4 @@ if($idUtente == $_SESSION['user_id']){
         header("Location: ../adminusers.php");
     }
 }
-
 ?>
