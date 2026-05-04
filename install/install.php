@@ -79,6 +79,8 @@ CREATE TABLE IF NOT EXISTS utenti(
     email VARCHAR(255) UNIQUE NOT NULL,
     ruolo BOOLEAN NOT NULL,
     saldo INT NOT NULL DEFAULT 20 CHECK (saldo >= 0),
+    bloccato BOOLEAN NOT NULL DEFAULT 0,
+    data_iscrizione DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_universita INT(11) NOT NULL,
     id_facolta INT(11) NOT NULL,
     CONSTRAINT fk_utente_universita FOREIGN KEY (id_universita) REFERENCES universita(id_universita),
@@ -92,6 +94,7 @@ CREATE TABLE IF NOT EXISTS dispense(
     prezzo INT(4) NOT NULL CHECK (prezzo >= 0),
     percorso_file VARCHAR(255) NOT NULL,
     data_caricamento DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approvata BOOLEAN NOT NULL DEFAULT 0,
     id_utente INT(11) NOT NULL,
     id_materiaperfacolta INT(11) NOT NULL,
     CONSTRAINT fk_dispensa_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente),
@@ -514,9 +517,9 @@ if((int)$row['tot'] === 0){
     ";
 
     $inserisciDati .= "
-    INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES
-    ('admin', '" . mysqli_real_escape_string($conn, $passHashAdmin) . "', 'admin@unibank.it', 1, 1, 1),
-    ('utente', '" . mysqli_real_escape_string($conn, $passHashUtente) . "', 'utente@email.it', 0, 1, 1);
+    INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta, data_iscrizione) VALUES
+    ('admin', '" . mysqli_real_escape_string($conn, $passHashAdmin) . "', 'admin@unibank.it', 1, 1, 1, NOW()),
+    ('utente', '" . mysqli_real_escape_string($conn, $passHashUtente) . "', 'utente@email.it', 0, 1, 1, NOW());
     ";
 
     $inserisciDati .= "
@@ -549,6 +552,7 @@ $configContent .= "define('DB_HOST', " . var_export($dbHost, true) . ");\n";
 $configContent .= "define('DB_USER', " . var_export($dbUser, true) . ");\n";
 $configContent .= "define('DB_PASS', " . var_export($dbPassword, true) . ");\n";
 $configContent .= "define('DB_NAME', " . var_export($databaseName, true) . ");\n\n";
+$configContent .= "define('GEMINI_API_KEY', 'AIzaSyCcKaQ43yr2WgLU9YujwIYW7DZSI6Scsmw');\n\n";
 $configContent .= "function db_connect() {\n";
 $configContent .= "    \$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);\n";
 $configContent .= "    if (!\$conn) {\n";

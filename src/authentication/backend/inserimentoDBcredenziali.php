@@ -73,7 +73,7 @@ mysqli_stmt_close($stmt);
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 $ruolo = 0;
 
-$inserimentoQuery = 'INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta) VALUES (?, ?, ?, ?, ?, ?)';
+$inserimentoQuery = 'INSERT INTO utenti (username, password, email, ruolo, id_universita, id_facolta, data_iscrizione) VALUES (?, ?, ?, ?, ?, ?, NOW())';
 $insertStmt = mysqli_prepare($connection, $inserimentoQuery);
 if(!$insertStmt){
     die('Errore nella preparazione della query di inserimento: ' . mysqli_error($connection));

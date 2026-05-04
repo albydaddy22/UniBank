@@ -31,8 +31,10 @@ CREATE TABLE utenti(
     username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    ruolo BOOLEAN NOT NULL,
+    ruolo BOOLEAN NOT NULL, --1 admin 0 utente normale
+    bloccato BOOLEAN NOT NULL DEFAULT 0, --0 non bloccato 1 bloccato
     saldo INT NOT NULL DEFAULT 20 CHECK (saldo >= 0), --saldo iniziale a 20 per dare la possibilita di acquistare almeno una dispensa
+    data_iscrizione DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_universita INT(11) NOT NULL,
     id_facolta INT(11) NOT NULL,
     CONSTRAINT fk_utente_universita FOREIGN KEY (id_universita) REFERENCES universita(id_universita),
@@ -46,6 +48,7 @@ CREATE TABLE dispense(
     prezzo INT(4) NOT NULL CHECK (prezzo >= 0),
     percorso_file VARCHAR(255) NOT NULL,
     data_caricamento DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approvata BOOLEAN NOT NULL DEFAULT 0,
     id_utente INT(11) NOT NULL,
     id_materiaperfacolta INT(11) NOT NULL,
     CONSTRAINT fk_dispensa_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente),
