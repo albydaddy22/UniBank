@@ -114,7 +114,7 @@ $conn = db_connect();
                 </div>
             </div>
             <div class="pfactions">
-                <button class="editbtn">✎ Modifica profilo</button>
+                <a href="../funzioniUtenti/modificaProfiloUtente.php"><button class="editbtn">✎ Modifica profilo</button></a>
             </div>
         </section>
 

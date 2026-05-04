@@ -51,6 +51,7 @@ $conn = db_connect();
             <a href="adminpanoramica.php" class="tab-item">Panoramica</a>
             <a href="adminusers.php" class="tab-item active">Gestione utenti</a>
             <a href="adminmateriali.php" class="tab-item">Gestione materiali</a>
+            <a href="adminstoricoacquisti.php" class="tab-item">Storico acquisti</a>
         </div>
     </nav>
 
@@ -170,10 +171,10 @@ $conn = db_connect();
                                     if($riga['id_utente'] == $_SESSION['user_id']){
                                         echo        '<button class="block-btn" onclick="openPopupBlocca()">Blocca</button>';
                                     }else{
-                                        echo        '<button class="block-btn" onclick="openPopupBloccaUtente(\'funzioniAdmin/bloccaSblocca.php?id_utente='.$riga['id_utente'].'\')">Blocca</button>';
+                                        echo        '<button class="block-btn" onclick="openPopupBloccaUtente(\'funzioniAdmin/bloccaSbloccaUtente.php?id_utente='.$riga['id_utente'].'\')">Blocca</button>';
                                     }
                                 }else{
-                                    echo        '<a href="funzioniAdmin/bloccaSblocca.php?id_utente='.$riga['id_utente'].'"><button class="unblock-btn">Sblocca</button></a>';
+                                    echo        '<a href="funzioniAdmin/bloccaSbloccaUtente.php?id_utente='.$riga['id_utente'].'"><button class="unblock-btn">Sblocca</button></a>';
                                 }
                                 if($riga['ruolo'] == 0){
                                     echo        '<a href="funzioniAdmin/promuoviRetrocedi.php?id_utente='.$riga['id_utente'].'"><button class="approve-btn">Promuovi</button></a>';

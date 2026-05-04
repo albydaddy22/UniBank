@@ -51,6 +51,7 @@ $conn = db_connect();
             <a href="adminpanoramica.php" class="tab-item">Panoramica</a>
             <a href="adminusers.php" class="tab-item">Gestione utenti</a>
             <a href="adminmateriali.php" class="tab-item active">Gestione materiali</a>
+            <a href="adminstoricoacquisti.php" class="tab-item">Storico acquisti</a>
         </div>
     </nav>
 
@@ -65,7 +66,7 @@ $conn = db_connect();
                         $search_val = htmlspecialchars($_GET['search']);
                     }
                     ?>
-                    <input type="text" name="search" placeholder="Cerca materiale per titolo o autore..." value="<?php echo $search_val; ?>">
+                    <input type="text" name="search" placeholder="Cerca materiale per titolo o autore" value="<?php echo $search_val; ?>">
                     <button type="submit" class="search-btn">Cerca</button>
                 </div>
                 <div class="sort-bar" style="display: flex; gap: 10px; align-items: center;">
@@ -166,15 +167,25 @@ $conn = db_connect();
                                     continue;
                                 }else if($riga['approvata'] == 1 && $riga['bloccato'] == 0){
                                     echo '<td><span class="status status-active">Approvato</span></td>';
+                                    echo '<td>';
+                                    echo '    <div class="action-buttons">';
+                                    echo '        <a href="funzioniAdmin/bloccaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="block-btn">Blocca</button></a>';
+                                    echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
+                                    echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
+                                    echo '    </div>';
+                                    echo '</td>';
                                 }else{
                                     echo '<td><span class="status status-blocked">Bloccata</span></td>';
+                                    echo '<td>';
+                                    echo '    <div class="action-buttons">';
+                                    if($riga['bloccato'] == 0){
+                                        echo '        <a href="funzioniAdmin/sbloccaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="unblock-btn">Sblocca</button></a>';
+                                    }
+                                    echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
+                                    echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
+                                    echo '    </div>';
+                                    echo '</td>';
                                 }
-                                echo '    <td>';
-                                echo '        <div class="action-buttons">';
-                                echo '            <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
-                                echo '            <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
-                                echo '        </div>';
-                                echo '    </td>';
                                 echo '</tr>';
                             }
                         ?>

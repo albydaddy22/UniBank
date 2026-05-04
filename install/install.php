@@ -526,17 +526,20 @@ if((int)$row['tot'] === 0){
     INSERT INTO materia (nome) VALUES
     ('Database e Normalizzazione'),
     ('NoSQL e Database Non Relazionali'),
-    ('Transazioni e Controllo della Concorrenza');
+    ('Transazioni e Controllo della Concorrenza'),
+    ('Autori italiani del XIII-XIV secolo');
 
     INSERT INTO materiaperfacolta (id_materia, id_facolta) VALUES
     (1, 48),
     (2, 48),
-    (3, 48);
+    (3, 48),
+    (4,26);
 
     INSERT INTO dispense (titolo, descrizione, prezzo, percorso_file, data_caricamento, id_utente, id_materiaperfacolta) VALUES
     ('Normalizzazione dei Database', 'Guida completa alle forme normali e normalizzazione relazionale', 15, 'dispense/normalizzazione.pdf', NOW(), 2, 1),
     ('NoSQL - Dispensa Completa', 'Introduzione ai database NoSQL, MongoDB e tecnologie alternative', 9, 'dispense/nosqldispensa.pdf', NOW(), 2, 2),
-    ('Transazioni nei Database', 'ACID, controllo della concorrenza e gestione delle transazioni', 11, 'dispense/transazioni.pdf', NOW(), 2, 3);
+    ('Transazioni nei Database', 'ACID, controllo della concorrenza e gestione delle transazioni', 11, 'dispense/transazioni.pdf', NOW(), 2, 3),
+    ('Dante alighieri', 'dispensa riassuntiva su dante', 11, 'dispense/dispensadantemediocre.pdf', NOW(), 2, 4);
     ";
 
     $inserisciQueries = array_filter(array_map('trim', explode(';', $inserisciDati)));
@@ -552,7 +555,7 @@ $configContent .= "define('DB_HOST', " . var_export($dbHost, true) . ");\n";
 $configContent .= "define('DB_USER', " . var_export($dbUser, true) . ");\n";
 $configContent .= "define('DB_PASS', " . var_export($dbPassword, true) . ");\n";
 $configContent .= "define('DB_NAME', " . var_export($databaseName, true) . ");\n\n";
-$configContent .= "define('GEMINI_API_KEY', 'AIzaSyCcKaQ43yr2WgLU9YujwIYW7DZSI6Scsmw');\n\n";
+$configContent .= "define('GEMINI_API_KEY', 'inserisci qui la api key che si trova nel file txt');\n\n";
 $configContent .= "function db_connect() {\n";
 $configContent .= "    \$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);\n";
 $configContent .= "    if (!\$conn) {\n";

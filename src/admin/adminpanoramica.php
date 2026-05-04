@@ -51,6 +51,7 @@ $conn = db_connect();
             <a href="adminpanoramica.php" class="tab-item active">Panoramica</a>
             <a href="adminusers.php" class="tab-item">Gestione utenti</a>
             <a href="adminmateriali.php" class="tab-item">Gestione materiali</a>
+            <a href="adminstoricoacquisti.php" class="tab-item">Storico acquisti</a>
         </div>
     </nav>
 
