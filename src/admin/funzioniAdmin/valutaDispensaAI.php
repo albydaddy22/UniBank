@@ -10,11 +10,13 @@ if(!isset($_SESSION['user_id']) || $_SESSION['ruolo'] != 1){
 $idDispensa = intval($_REQUEST['id_dispensa']);
 
 $query = "
-    SELECT d.percorso_file, d.titolo, m.nome as materia
-    FROM dispense d
-    JOIN materiaperfacolta mpf ON d.id_materiaperfacolta = mpf.id_materiaperfacolta
-    JOIN materia m ON mpf.id_materia = m.id_materia
-    WHERE d.id_dispensa = {$idDispensa}
+    SELECT d.percorso_file, d.titolo, m.nome as materia, f.nome as facolta
+    FROM dispense d, materiaperfacolta mpf, materia m, utenti u, facolta f
+    WHERE d.id_materiaperfacolta = mpf.id_materiaperfacolta
+    AND mpf.id_materia = m.id_materia
+    AND d.id_utente = u.id_utente
+    AND u.id_facolta = f.id_facolta
+    AND d.id_dispensa = {$idDispensa}
 ";
 
 $ris = mysqli_query($conn, $query);
@@ -40,11 +42,13 @@ if(empty($apiKey)){
     die("Per favore inserisci una chiave API di Gemini valida in config.php");
 }
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
-$prompt = "Sei un revisore universitario molto rigoroso. Devi analizzare questo documento caricato per il corso di '{$dispensa['materia']}'. 
+$prompt = "Sei un revisore universitario molto rigoroso. Devi analizzare questo documento caricato da uno studente della facoltà di '{$dispensa['facolta']}' per il corso di '{$dispensa['materia']}'. 
 Regole:
 1. Verifica che NON sia spam o materiale pubblicitario.
 2. Verifica che NON contenga contenuti offensivi o inappropriati.
-3. Valuta quanto il materiale è attinente e utile per il corso indicato.
+3. Valuta quanto il materiale è attinente e utile per il corso indicato nella rispettiva facoltà.
+4.Se la dispensa non c'entra niente con il corso '{$dispensa['materia']}' dai direttamente un voto minore a 4.5 anche se è attinente alla facolta, però avvisa l'admin.
+5.Se la dispensa non c'entra niente con la facoltà di '{$dispensa['facolta']}' dai direttamente un voto minore a 4.5 anche se è attinente al corso, però avvisa l'admin.
 Restituisci SOLO un JSON valido con questa struttura esatta:
 {
   \"punteggio\": [un numero da 0 a 10],
