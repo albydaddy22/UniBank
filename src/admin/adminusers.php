@@ -167,7 +167,11 @@ $conn = db_connect();
                                 echo        '<div class="action-buttons">';
                                 echo            '<a href="funzioniAdmin/modificaUtente.php?id_utente='.$riga['id_utente'].'"><button class="edit-btn">Modifica</button></a>';
                                 if($riga['bloccato'] == 0){
-                                    echo        '<a href="funzioniAdmin/bloccaSblocca.php?id_utente='.$riga['id_utente'].'" onclick="return confirm(\'Sei sicuro di voler bloccare questo utente? L\\\'operazione gli impedirà l\\\'accesso e i suoi materiali non saranno più visibili agli altri. Potrai comunque sbloccarlo in futuro.\')"><button class="block-btn">Blocca</button></a>';
+                                    if($riga['id_utente'] == $_SESSION['user_id']){
+                                        echo        '<button class="block-btn" onclick="openPopupBlocca()">Blocca</button>';
+                                    }else{
+                                        echo        '<button class="block-btn" onclick="openPopupBloccaUtente(\'funzioniAdmin/bloccaSblocca.php?id_utente='.$riga['id_utente'].'\')">Blocca</button>';
+                                    }
                                 }else{
                                     echo        '<a href="funzioniAdmin/bloccaSblocca.php?id_utente='.$riga['id_utente'].'"><button class="unblock-btn">Sblocca</button></a>';
                                 }
@@ -176,7 +180,7 @@ $conn = db_connect();
                                 }else{
                                     echo        '<a href="funzioniAdmin/promuoviRetrocedi.php?id_utente='.$riga['id_utente'].'"><button class="view-btn">Retrocedi</button></a>';
                                 }
-                                echo            '<a href="funzioniAdmin/eliminaUtente.php?id_utente='.$riga['id_utente'].'" onclick="return confirm(\'ATTENZIONE: Sei sicuro di voler eliminare DEFINITIVAMENTE questo utente? Tutti i suoi dati, inclusi i record degli acquisti e le dispense caricate, verranno rimossi permanentemente dal sistema. Questa operazione NON può essere annullata.\')"><button class="delete-btn-table">Elimina</button></a>';
+                                echo            '<button class="delete-btn-table" onclick="openPopupEliminaUtente(\'funzioniAdmin/eliminaUtente.php?id_utente='.$riga['id_utente'].'\')">Elimina</button>';
                                 echo        '</div>';
                                 echo    '</td>';
                                 echo '</tr>';
@@ -189,7 +193,23 @@ $conn = db_connect();
     </div>
 </main>
 
+<div class="popup-overlay" id="popupBlocca">
+    <div class="popup-box">
+        <h3>Operazione non consentita</h3>
+        <p>Non puoi bloccare te stesso.</p>
+        <button class="popup-btn" onclick="closePopupBlocca()">Chiudi</button>
+    </div>
+</div>
+
 <script>
+    function openPopupBlocca() {
+        document.getElementById('popupBlocca').classList.add('active');
+    }
+
+    function closePopupBlocca() {
+        document.getElementById('popupBlocca').classList.remove('active');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const navbar = document.querySelector('.nbcontainer');
         function ombraNavbar() {
@@ -203,5 +223,96 @@ $conn = db_connect();
         window.addEventListener('scroll', ombraNavbar);
     });
 </script>
+
+<!-- Popup conferma eliminazione utente -->
+<div class="popup-overlay" id="popupEliminaUtente">
+    <div class="popup-box">
+        <h3>Conferma eliminazione</h3>
+        <p>ATTENZIONE: Sei sicuro di voler eliminare DEFINITIVAMENTE questo utente? Tutti i suoi dati, inclusi i record degli acquisti e le dispense caricate, verranno rimossi permanentemente dal sistema. Questa operazione NON può essere annullata.</p>
+        <div style="display:flex; gap:10px; justify-content:center; align-items:center; margin-top:10px;">
+            <button class="popup-btn" onclick="closePopupEliminaUtente()">Annulla</button>
+            <button class="popup-btn" onclick="confirmEliminaUtente()">Conferma</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup conferma blocco utente -->
+<div class="popup-overlay" id="popupBloccaUtente">
+    <div class="popup-box">
+        <h3>Conferma blocco</h3>
+        <p>Sei sicuro di voler bloccare questo utente? L'operazione gli impedirà l'accesso e i suoi materiali non saranno più visibili agli altri. Potrai comunque sbloccarlo in futuro.</p>
+        <div style="display:flex; gap:10px; justify-content:center; align-items:center; margin-top:10px;">
+            <button class="popup-btn" onclick="closePopupBloccaUtente()">Annulla</button>
+            <button class="popup-btn" onclick="confirmBloccaUtente()">Conferma</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup prevenzione auto-promozione/retrocessione -->
+<div class="popup-overlay" id="popupSelfRole">
+    <div class="popup-box">
+        <h3>Operazione non consentita</h3>
+        <p>Non puoi modificare il tuo ruolo.</p>
+        <button class="popup-btn" onclick="closePopupSelfRole()">Chiudi</button>
+    </div>
+</div>
+
+<!-- Popup prevenzione auto-eliminazione -->
+<div class="popup-overlay" id="popupSelfDelete">
+    <div class="popup-box">
+        <h3>Operazione non consentita</h3>
+        <p>Non puoi eliminare te stesso.</p>
+        <button class="popup-btn" onclick="closePopupSelfDelete()">Chiudi</button>
+    </div>
+</div>
+
+<script>
+    let eliminaUtenteUrl = '';
+    function openPopupEliminaUtente(url){
+        eliminaUtenteUrl = url;
+        document.getElementById('popupEliminaUtente').classList.add('active');
+    }
+    function closePopupEliminaUtente(){
+        document.getElementById('popupEliminaUtente').classList.remove('active');
+        eliminaUtenteUrl = '';
+    }
+    function confirmEliminaUtente(){
+        if(eliminaUtenteUrl){
+            window.location.href = eliminaUtenteUrl;
+        }
+    }
+
+    let bloccaUtenteUrl = '';
+    function openPopupBloccaUtente(url){
+        bloccaUtenteUrl = url;
+        document.getElementById('popupBloccaUtente').classList.add('active');
+    }
+
+    function closePopupBloccaUtente(){
+        document.getElementById('popupBloccaUtente').classList.remove('active');
+        bloccaUtenteUrl = '';
+    }
+
+    function confirmBloccaUtente(){
+        if(bloccaUtenteUrl){
+            window.location.href = bloccaUtenteUrl;
+        }
+    }
+
+    function openPopupSelfRole(){
+        document.getElementById('popupSelfRole').classList.add('active');
+    }
+    function closePopupSelfRole(){
+        document.getElementById('popupSelfRole').classList.remove('active');
+    }
+
+    function openPopupSelfDelete(){
+        document.getElementById('popupSelfDelete').classList.add('active');
+    }
+    function closePopupSelfDelete(){
+        document.getElementById('popupSelfDelete').classList.remove('active');
+    }
+</script>
+
 </body>
 </html>

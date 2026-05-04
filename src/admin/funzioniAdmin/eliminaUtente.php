@@ -4,9 +4,8 @@ require_once __DIR__ . '/../../../config.php';
 $conn = db_connect();
 $idUtente = intval($_REQUEST['id_utente']);
 if($idUtente == $_SESSION['user_id']){
-    echo 'non puoi eliminare te stesso';
-    echo '<br>';
-    echo '<a href="../adminusers.php">torna indietro</a>';
+    header("Location: ../adminusers.php?selfDelete=1");
+    exit;
 }else{
     if($_SESSION['ruolo'] == 1){
         $query1 = "DELETE FROM acquisti WHERE id_utente = {$idUtente}";

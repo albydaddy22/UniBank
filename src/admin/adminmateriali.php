@@ -106,9 +106,9 @@ $conn = db_connect();
                                     echo '<td>';
                                     echo '    <div class="action-buttons">';
                                     echo '        <a href="funzioniAdmin/approvaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="approve-btn">Approva</button></a>';
-                                    echo '        <a href="funzioniAdmin/valutaDispensaAI.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn" style="background-color: #8a2be2; border-color: #8a2be2;">Valuta AI</button></a>';
+                                    echo '        <a href="funzioniAdmin/valutaDispensaAI.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Valuta AI </button></a>';
                                     echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
-                                    echo '        <a href="funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'" onclick="return confirm(\'Sei sicuro di voler eliminare questa dispensa? L\\\'azione non è reversibile.\')"><button class="delete-btn-table">Elimina</button></a>';
+                                    echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
                                     echo '    </div>';
                                     echo '</td>';
                                     echo '</tr>';
@@ -121,7 +121,7 @@ $conn = db_connect();
                                 echo '    <td>';
                                 echo '        <div class="action-buttons">';
                                 echo '            <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
-                                echo '            <a href="funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'" onclick="return confirm(\'Sei sicuro di voler eliminare questa dispensa? L\\\'azione non è reversibile.\')"><button class="delete-btn-table">Elimina</button></a>';
+                                echo '            <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
                                 echo '        </div>';
                                 echo '    </td>';
                                 echo '</tr>';
@@ -134,7 +134,37 @@ $conn = db_connect();
     </div>
 </main>
 
+<div class="popup-overlay" id="popupEliminaDispensa">
+    <div class="popup-box">
+        <h3>Conferma eliminazione</h3>
+        <p>Sei sicuro di voler eliminare questa dispensa? L'azione non è reversibile.</p>
+        <div style="display:flex; gap:10px; justify-content:center; align-items: center; margin-top: 10px;">
+            <button class="popup-btn" onclick="closePopupEliminaDispensa()">Annulla</button>
+            <button class="popup-btn" onclick="confirmEliminaDispensa()">Conferma</button>
+        </div>
+    </div>
+</div>
+
 <script>
+    let eliminaDispensaUrl = '';
+    function openPopupEliminaDispensa(url) {
+        eliminaDispensaUrl = url;
+        document.getElementById('popupEliminaDispensa').classList.add('active');
+    }
+    function closePopupEliminaDispensa() {
+        document.getElementById('popupEliminaDispensa').classList.remove('active');
+        eliminaDispensaUrl = '';
+    }
+    function confirmEliminaDispensa() {
+        if (eliminaDispensaUrl) {
+            window.location.href = eliminaDispensaUrl;
+        }
+    }
+</script>
+
+<script>
+
+
     document.addEventListener('DOMContentLoaded', function() {
         const navbar = document.querySelector('.nbcontainer');
         function ombraNavbar() {

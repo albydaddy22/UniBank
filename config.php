@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', '127.0.0.1');
+define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'unibankdB');
+define('DB_NAME', 'unibankdatabase');
 
 define('GEMINI_API_KEY', 'AIzaSyCcKaQ43yr2WgLU9YujwIYW7DZSI6Scsmw');
 

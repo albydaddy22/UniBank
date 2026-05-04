@@ -247,7 +247,7 @@ $conn = db_connect();
                             echo        '<p>di '. $riga['username'] .' • '. substr($riga['data_caricamento'],0,10) . '</p>';
                             echo    '</div>';
                             echo     '<button class="delete-btn">';
-                            echo        '<a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><img src="../../assets/download.png" alt="delete" style="filter: hue-rotate(140deg) saturate(3); transform: rotate(45deg);"></a>';
+                            echo        '<a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><img src="../../assets/download.png" alt="download"></a>';
                             echo     '</button>';
                             echo '</div>';  
                         }
