@@ -135,7 +135,7 @@ try{
     if($conn){
         mysqli_rollback($conn);
         mysqli_close($conn);
-        $_SESSION['comprato'] = true;
+        $_SESSION['comprato'] = false;
     }
     echo "rrrore durante l'acquisto: " . ($e->getMessage());
     echo "<br>";
