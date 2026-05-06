@@ -391,33 +391,48 @@
     gap: 20px;
 }
 
-.likeborder {
-    width: 20px;
-
-}
-
 .likebtn {
     border: none;
     background-color: transparent;
     cursor: pointer;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.likeborder {
+    width: 20px;
+    position: absolute;
 }
 
 .like {
     width: 20px;
-    visibility: hidden;
     position: absolute;
-}
-
-.likebtn:hover+.likeborder {
-    visibility: hidden;
     opacity: 0;
-    position: absolute;
+    transition: opacity 0.2s;
 }
 
-.likebtn:hover+.like {
-    visibility: visible;
+.likebtn:hover .like {
     opacity: 0.5;
-    position: unset;
+}
+
+.likebtn:hover .likeborder {
+    opacity: 0;
+}
+
+.likebtn.active .like {
+    opacity: 1;
+}
+
+.likebtn.active .likeborder {
+    opacity: 0;
+}
+
+.likebtn:active .like {
+    transform: scale(1.2);
 }
 
 .buybtn {

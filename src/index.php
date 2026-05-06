@@ -170,8 +170,10 @@ if(!isset($_SESSION['is_logged'])){
                         echo '<span class="dbprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
                         echo '<form action="./acquistaDispense/elaborazioneAcquisto.php" method="POST">';
                         echo '<input type="hidden" name="id_dispensa" value="' . $disp['id_dispensa'] . '">';
-                        echo '<button class="likebtn"><img class="likeborder" src="../assets/likeborder.png" alt="like"></button>';
-                        echo '<button class="likebtn"><img class="like" src="../assets/like.png" alt="like"></button>';
+                        echo '<button type="button" class="likebtn">';
+                        echo '<img class="likeborder" src="../assets/likeborder.png" alt="like">';
+                        echo '<img class="like" src="../assets/like.png" alt="like">';
+                        echo '</button>';
                         echo '<button type="submit" class="buybtn">Compra</button>';
                         echo '</form>';
                         echo '</div>';
@@ -235,6 +237,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     ombraNavbar();
     window.addEventListener('scroll', ombraNavbar);
+
+    const likeBtns = document.querySelectorAll('.likebtn');
+    likeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
 });
 </script>
 </html>
