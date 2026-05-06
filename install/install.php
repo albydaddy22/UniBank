@@ -110,6 +110,16 @@ CREATE TABLE IF NOT EXISTS acquisti(
     CONSTRAINT fk_acquisto_dispensa FOREIGN KEY (id_dispensa) REFERENCES dispense(id_dispensa),
     UNIQUE (id_utente, id_dispensa)
 );
+
+CREATE TABLE IF NOT EXISTS likes(
+    id_like INT(11) AUTO_INCREMENT PRIMARY KEY,
+    id_dispensa INT(11) NOT NULL,
+    id_utente INT(11) NOT NULL,
+    data_like DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_like_dispensa FOREIGN KEY (id_dispensa) REFERENCES dispense(id_dispensa),
+    CONSTRAINT fk_like_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente),
+    UNIQUE(id_dispensa,id_utente)
+);
 ";
 
 $queries = array_filter(array_map('trim', explode(';', $sql)));
