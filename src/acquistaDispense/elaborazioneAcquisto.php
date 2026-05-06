@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){
-    header("Location: ../authentication/frontend/signup.php");
+    header("Location: ../authentication/frontend/login.php");
     exit;
 }
 

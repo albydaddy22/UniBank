@@ -105,7 +105,7 @@ $conn = db_connect();
                     <tbody>
                         <?php
                             $query = "
-                                    SELECT d.id_dispensa, d.titolo, d.data_caricamento, d.approvata, f.nome AS nomeFacolta, u.username AS nomeUser, u.bloccato,
+                                    SELECT d.id_dispensa, d.titolo, d.data_caricamento, d.approvata, f.nome AS nomeFacolta, u.username AS nomeUser, u.bloccato, d.bloccata AS dispensaBloc,
                                            (SELECT COUNT(*) FROM acquisti WHERE id_dispensa = d.id_dispensa) AS numDownloads
                                     FROM dispense d, facolta f, utenti u
                                     WHERE d.id_utente = u.id_utente
@@ -153,7 +153,18 @@ $conn = db_connect();
                                 echo '    <td>'.$data.'</td>';
                                 echo '    <td><span class="download-count">'.$downloads.'</span></td>';
                                 
-                                if($riga['approvata'] == 0 && $riga['bloccato'] == 0){
+                                if($riga['bloccato'] == 1 || $riga['dispensaBloc'] == 1){
+                                    echo '<td><span class="status status-blocked">Bloccata</span></td>';
+                                    echo '<td>';
+                                    echo '    <div class="action-buttons">';
+                                    if($riga['dispensaBloc'] == 1){
+                                        echo '        <a href="funzioniAdmin/sbloccaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="unblock-btn">Sblocca</button></a>';
+                                    }
+                                    echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
+                                    echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
+                                    echo '    </div>';
+                                    echo '</td>';
+                                }else if($riga['approvata'] == 0){
                                     echo '<td><span class="status status-pending">In revisione</span></td>';
                                     echo '<td>';
                                     echo '    <div class="action-buttons">';
@@ -163,24 +174,11 @@ $conn = db_connect();
                                     echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
                                     echo '    </div>';
                                     echo '</td>';
-                                    echo '</tr>';
-                                    continue;
-                                }else if($riga['approvata'] == 1 && $riga['bloccato'] == 0){
+                                }else{
                                     echo '<td><span class="status status-active">Approvato</span></td>';
                                     echo '<td>';
                                     echo '    <div class="action-buttons">';
                                     echo '        <a href="funzioniAdmin/bloccaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="block-btn">Blocca</button></a>';
-                                    echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
-                                    echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
-                                    echo '    </div>';
-                                    echo '</td>';
-                                }else{
-                                    echo '<td><span class="status status-blocked">Bloccata</span></td>';
-                                    echo '<td>';
-                                    echo '    <div class="action-buttons">';
-                                    if($riga['bloccato'] == 0){
-                                        echo '        <a href="funzioniAdmin/sbloccaDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="unblock-btn">Sblocca</button></a>';
-                                    }
                                     echo '        <a href="../downloadDispense/downloadDispensa.php?id_dispensa='.$riga['id_dispensa'].'"><button class="view-btn">Vedi</button></a>';
                                     echo '        <button class="delete-btn-table" onclick="openPopupEliminaDispensa(\'funzioniAdmin/eliminaDispensa.php?id_dispensa='.$riga['id_dispensa'].'\')">Elimina</button>';
                                     echo '    </div>';

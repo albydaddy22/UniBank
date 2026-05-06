@@ -5,18 +5,22 @@ require_once __DIR__ . '/../config.php';
 $conn = db_connect();
 
 $queryHeader = '
-    SELECT d.id_dispensa, d.titolo, d.prezzo, u.username
+    SELECT d.id_dispensa, d.titolo, d.prezzo, u.username, d.bloccata AS dispensaBloc
     FROM dispense d, utenti u
     WHERE d.id_utente = u.id_utente
     AND u.bloccato = 0
     AND d.approvata = 1
+    AND d.bloccata = 0
     ORDER BY d.data_caricamento DESC
     LIMIT 3
 ';
 $resultHeader = mysqli_query($conn, $queryHeader);
 
-$queryHero ='
-    SELECT d.id_dispensa, d.titolo, d.descrizione, d.prezzo, u.username, m.nome as materia, f.nome as facolta, uni.nome as universita
+$currentUserId = $_SESSION['user_id'] ?? 0;
+$queryHero ="
+    SELECT d.id_dispensa, d.titolo, d.descrizione, d.prezzo, u.username, m.nome as materia, f.nome as facolta, uni.nome as universita, d.bloccata AS dispensaBloc,
+    (SELECT COUNT(*) FROM likes l WHERE d.id_dispensa = l.id_dispensa) AS numLikes,
+    (SELECT COUNT(*) FROM likes WHERE id_dispensa = d.id_dispensa AND id_utente = $currentUserId) AS hasLiked
     FROM dispense d, utenti u, materiaperfacolta mpf, materia m, facolta f, universita uni
     WHERE d.id_utente = u.id_utente
     AND d.id_materiaperfacolta = mpf.id_materiaperfacolta
@@ -25,9 +29,10 @@ $queryHero ='
     AND u.id_universita = uni.id_universita
     AND u.bloccato = 0
     AND d.approvata = 1
+    AND d.bloccata = 0
     ORDER BY d.data_caricamento DESC
     LIMIT 4
-';
+";
 $resultHero = mysqli_query($conn, $queryHero);
 
 if(!isset($_SESSION['is_logged'])){
@@ -137,10 +142,10 @@ if(!isset($_SESSION['is_logged'])){
                 <div class="headerdispense">
                     <?php
                     while($disp = mysqli_fetch_assoc($resultHeader)){
-                        echo '<div class="hddispensabox">';
-                        echo '<span class="hdnomedispensa">' . htmlspecialchars($disp['titolo']) . '</span>';
-                        echo '<span class="hdprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
-                        echo '</div>';
+                            echo '<div class="hddispensabox">';
+                            echo '<span class="hdnomedispensa">' . htmlspecialchars($disp['titolo']) . '</span>';
+                            echo '<span class="hdprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
+                            echo '</div>';
                     }
                     ?>
                 </div>
@@ -156,28 +161,33 @@ if(!isset($_SESSION['is_logged'])){
                     <?php
                     $count = 0;
                     while($disp = mysqli_fetch_assoc($resultHero)){
-                        $count++;
-                        echo '<div class="hrdispensabox">';
-                        echo '<div class="dbtextbox">';
-                        echo '<img class="dbdocument" src="../assets/document.png" alt="">';
-                        echo '<h4 class="dbnomedispensa">' . htmlspecialchars($disp['titolo']) . '</h4>';
-                        echo '<p class="dbcorso">' . htmlspecialchars($disp['materia']) . '</p>';
-                        echo '<p class="dbuniversita">' . htmlspecialchars($disp['universita']) . '</p>';
-                        echo '<p class="dbfacolta">' . htmlspecialchars($disp['facolta']) . '</p>';
-                        echo '<p class="dbuser">di ' . htmlspecialchars($disp['username']) . '</p>';
-                        echo '</div>';
-                        echo '<div class="dbbuyfield">';
-                        echo '<span class="dbprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
-                        echo '<form action="./acquistaDispense/elaborazioneAcquisto.php" method="POST">';
-                        echo '<input type="hidden" name="id_dispensa" value="' . $disp['id_dispensa'] . '">';
-                        echo '<a href="#"><button type="button" class="likebtn">'; // metti il file php nell'a href
-                        echo '<img class="likeborder" src="../assets/likeborder.png" alt="like">';
-                        echo '<img class="like" src="../assets/like.png" alt="like">';
-                        echo '</button></a>';
-                        echo '<button type="submit" class="buybtn">Compra</button>';
-                        echo '</form>';
-                        echo '</div>';
-                        echo '</div>';
+                            $count++;
+                            echo '<div class="hrdispensabox">';
+                            echo '<div class="dbtextbox">';
+                            echo '<img class="dbdocument" src="../assets/document.png" alt="">';
+                            echo '<h4 class="dbnomedispensa">' . htmlspecialchars($disp['titolo']) . '</h4>';
+                            echo '<p class="dbcorso">' . htmlspecialchars($disp['materia']) . '</p>';
+                            echo '<p class="dbuniversita">' . htmlspecialchars($disp['universita']) . '</p>';
+                            echo '<p class="dbfacolta">' . htmlspecialchars($disp['facolta']) . '</p>';
+                            echo '<p class="dbuser">di ' . htmlspecialchars($disp['username']) . '</p>';
+                            echo '</div>';
+                            echo '<div class="dbbuyfield">';
+                            echo '<span class="dbprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
+                            echo '<form action="./acquistaDispense/elaborazioneAcquisto.php" method="POST">';
+                            echo '<input type="hidden" name="id_dispensa" value="' . $disp['id_dispensa'] . '">';
+                            echo $disp['numLikes'];
+                            $activeClass = '';
+                            if($disp['hasLiked'] > 0  && $_SESSION['is_logged'] == true && !empty($_SESSION['is_logged'])){
+                                $activeClass = 'active';
+                            }
+                            echo '<a href="funzioniUtenti/aggiuntaLikeDispensa.php?id_dispensa='.$disp['id_dispensa'].'"><button type="button" class="likebtn '.$activeClass.'">'; 
+                            echo '<img class="likeborder" src="../assets/likeborder.png" alt="like">';
+                            echo '<img class="like" src="../assets/like.png" alt="like">';
+                            echo '</button></a>';
+                            echo '<button type="submit" class="buybtn">Compra</button>';
+                            echo '</form>';
+                            echo '</div>';
+                            echo '</div>';
                     }
                     if($count == 0){
                         echo '<p>Nessuna dispensa disponibile al momento.</p>';

@@ -8,7 +8,7 @@ if(!isset($_SESSION['user_id']) || $_SESSION['ruolo'] != 1){
 }
 
 $idDispensa = intval($_REQUEST['id_dispensa']);
-$query = "UPDATE dispense SET approvata = 2 WHERE id_dispensa = {$idDispensa}";
+$query = "UPDATE dispense SET bloccata = 1 WHERE id_dispensa = {$idDispensa}";
 $ris = mysqli_query($conn,$query);
 header("Location: ../adminmateriali.php");
 ?>

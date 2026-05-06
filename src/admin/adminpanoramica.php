@@ -85,6 +85,7 @@ $conn = db_connect();
                             SELECT COUNT(*) AS numDispenseAttive
                             FROM utenti u, dispense d
                             WHERE u.bloccato = 0
+                            AND d.bloccata = 0
                             AND d.approvata = 1
                             AND d.id_utente = u.id_utente
                     ";
@@ -96,7 +97,7 @@ $conn = db_connect();
                     $query2 = "
                             SELECT COUNT(*) AS numBloccate
                             FROM utenti u, dispense d
-                            WHERE u.bloccato = 1
+                            WHERE (u.bloccato = 1 OR d.bloccata = 1)
                             AND d.approvata = 1
                             AND d.id_utente = u.id_utente
                     ";
@@ -122,7 +123,7 @@ $conn = db_connect();
                 ?>
                 <div class="stat-pills" id="dispense-pills">
                     <button class="stat-pill active" data-target="totali"   data-label="Dispense approvate attive">Attive</button>
-                    <button class="stat-pill"        data-target="bloccate" data-label="Dispense da utenti bloccati">Da bloccati</button>
+                    <button class="stat-pill"        data-target="bloccate" data-label="Dispense bloccate">Bloccate</button>
                     <button class="stat-pill"        data-target="inattesa" data-label="Dispense in attesa di approvazione">In attesa</button>
                 </div>
             </div>
