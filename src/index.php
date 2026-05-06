@@ -170,10 +170,10 @@ if(!isset($_SESSION['is_logged'])){
                         echo '<span class="dbprezzodispensa">' . $disp['prezzo'] . ' <img class="ut" src="../assets/unitoken.png" alt="UT"></span>';
                         echo '<form action="./acquistaDispense/elaborazioneAcquisto.php" method="POST">';
                         echo '<input type="hidden" name="id_dispensa" value="' . $disp['id_dispensa'] . '">';
-                        echo '<button type="button" class="likebtn">';
+                        echo '<a href="#"><button type="button" class="likebtn">'; // metti il file php nell'a href
                         echo '<img class="likeborder" src="../assets/likeborder.png" alt="like">';
                         echo '<img class="like" src="../assets/like.png" alt="like">';
-                        echo '</button>';
+                        echo '</button></a>';
                         echo '<button type="submit" class="buybtn">Compra</button>';
                         echo '</form>';
                         echo '</div>';
