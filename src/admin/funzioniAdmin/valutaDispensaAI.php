@@ -31,10 +31,10 @@ if(!file_exists($percorsoFisico)){
     die("Il file fisico della dispensa non esiste: " . $percorsoFisico);
 }
 
-// 2. Lettura e conversione in Base64
+// lettura e conversione in Base64
 $fileContent = file_get_contents($percorsoFisico);
 $base64File = base64_encode($fileContent);
-// Otteniamo il tipo mime, se fallisce usiamo application/pdf
+//otteniamo tipo mime, se fallisce usiamo application/pdf
 $mimeType = mime_content_type($percorsoFisico) ?: 'application/pdf';
 
 $apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : '';
@@ -96,7 +96,7 @@ if(!isset($jsonResponse['candidates'][0]['content']['parts'][0]['text'])){
 
 $aiText = $jsonResponse['candidates'][0]['content']['parts'][0]['text'];
 
-// Pulisci il markdown di code block se presente
+// pulisci il markdown di code block se presente
 $aiText = preg_replace('/```json\s*/', '', $aiText);
 $aiText = preg_replace('/```/', '', $aiText);
 $aiData = json_decode(trim($aiText), true);

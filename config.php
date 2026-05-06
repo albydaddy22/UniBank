@@ -1,10 +1,10 @@
 <?php
-define('DB_HOST', 'localhost');
+define('DB_HOST', '127.0.0.1');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'unibankdb');
+define('DB_NAME', 'unibankDATAB');
 
-define('GEMINI_API_KEY', '');
+define('GEMINI_API_KEY', 'inserisci qui la api key che si trova nel file txt');
 
 function db_connect() {
     $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);

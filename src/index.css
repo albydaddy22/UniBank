@@ -71,7 +71,7 @@
     align-items: center;
 }
 
-.menu ul li a{
+.menu ul li a {
     width: max-content;
     position: relative;
     text-decoration: none;
@@ -96,6 +96,7 @@
     transition-timing-function: ease-in-out;
     transform: scaleX(0);
 }
+
 .listelement:hover::after {
     transform: scaleX(1);
 }
@@ -229,7 +230,7 @@
     color: var(--color-yellow-primary);
 }
 
-.textbox p{
+.textbox p {
     color: var(--color-grey-foreground);
 }
 
@@ -370,6 +371,7 @@
     justify-content: space-between;
     padding-top: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
+
 }
 
 .dbprezzodispensa {
@@ -380,6 +382,42 @@
     font-size: 20px;
     justify-content: center;
     align-items: center;
+}
+
+.dbbuyfield form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.likeborder {
+    width: 20px;
+
+}
+
+.likebtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.like {
+    width: 20px;
+    visibility: hidden;
+    position: absolute;
+}
+
+.likebtn:hover+.likeborder {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+}
+
+.likebtn:hover+.like {
+    visibility: visible;
+    opacity: 0.5;
+    position: unset;
 }
 
 .buybtn {
@@ -493,7 +531,7 @@
     width: 15px;
 }
 
-.profileicon:hover + .userpopup {
+.profileicon:hover+.userpopup {
     opacity: 1;
     visibility: visible;
 }
@@ -550,7 +588,7 @@ footer ul li a:hover {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center ;
+    align-items: center;
 }
 
 .contactbtn {
@@ -564,7 +602,7 @@ footer ul li a:hover {
     transition: 0.3s ease;
 }
 
-.ftcolumn h2{
+.ftcolumn h2 {
     color: #ecedf0;
     margin-bottom: 15px;
 }
