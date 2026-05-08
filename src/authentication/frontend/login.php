@@ -95,7 +95,6 @@ if($_SESSION['is_logged']) {
         </footer>
     </div>
     
-    <!-- Popup overlays for login errors -->
     <div class="popup-overlay" id="popupInvalidEmail">
         <div class="popup-box">
             <h3>Attenzione</h3>
