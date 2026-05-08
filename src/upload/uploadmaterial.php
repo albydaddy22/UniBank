@@ -133,7 +133,7 @@ $conn = db_connect();
                             </div>
                             <div class="inputbox">
                                 <label for="facolta">Facoltà</label>
-                                <select name="facolta" required>
+                                <select name="facolta" id="facolta" required>
                                     <option value="">Seleziona facoltà</option>
                                     <?php
                                     require_once __DIR__ . '/../../config.php';
@@ -151,7 +151,9 @@ $conn = db_connect();
                             </div>
                             <div class="inputbox">
                                 <label for="corso">Corso/Materia</label>
-                                <input type="text" name="corso" placeholder="es. Analisi 1" required>
+                                <select name="corso" id="corso" required>
+                                    <option value="">Prima seleziona una facoltà</option>
+                                </select>
                             </div>
                             <div class="inputbox">
                                 <label for="prezzo">Prezzo ( <img style="width: 20px" src="../../assets/unitoken.png" alt="UT">)</label>
@@ -207,7 +209,7 @@ $conn = db_connect();
         const fileUploadText = document.getElementById('uploadtext');
         const uploadIcon = document.getElementById('uploadicon');
 
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function(){
             if (this.files && this.files.length > 0) {
                 fileUploadText.textContent = "File selezionato: " + this.files[0].name;
                 fileUploadText.style.color = "var(--color-blue-background)";
@@ -224,7 +226,7 @@ $conn = db_connect();
             label.addEventListener(eventName, preventDefaults, false);
         });
 
-        function preventDefaults (e) {
+        function preventDefaults(e){
             e.preventDefault();
             e.stopPropagation();
         }
@@ -244,7 +246,7 @@ $conn = db_connect();
             const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.oasis.opendocument.text', 'application/rtf', 'text/rtf'];
             const allowedExtensions = ['.pdf', '.docx', '.odt', '.rtf'];
 
-            if (files.length > 0) {
+            if(files.length > 0){
                 const file = files[0];
                 const fileName = file.name.toLowerCase();
                 const fileType = file.type;
@@ -252,7 +254,7 @@ $conn = db_connect();
                 const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
                 const hasValidType = allowedTypes.includes(fileType) || fileName.endsWith('.docx') || fileName.endsWith('.odt') || fileName.endsWith('.rtf');
                 
-                if (hasValidExtension || hasValidType) {
+                if(hasValidExtension || hasValidType){
                     fileInput.files = files;
                     const event = new Event('change');
                     fileInput.dispatchEvent(event);
@@ -261,6 +263,40 @@ $conn = db_connect();
                 }
             }
         }, false);
+
+        const facoltaSelect = document.getElementById('facolta');
+        const corsoSelect = document.getElementById('corso');
+
+        facoltaSelect.addEventListener('change', function(){
+            const idFacolta = this.value;
+
+            corsoSelect.innerHTML = '<option value="">Caricamento...</option>';
+            corsoSelect.disabled = true;
+
+            if(!idFacolta){
+                corsoSelect.innerHTML = '<option value="">Prima seleziona una facoltà</option>';
+                corsoSelect.disabled = false;
+                return;
+            }
+
+            fetch('funzioniUpload/getMaterie.php?id_facolta=' + encodeURIComponent(idFacolta))
+                .then(response => response.json())
+                .then(materie => {
+                    corsoSelect.innerHTML = '<option value="">Seleziona materia</option>';
+                    materie.forEach(m => {
+                        const option = document.createElement('option');
+                        option.value = m.id;
+                        option.textContent = m.nome;
+                        corsoSelect.appendChild(option);
+                    });
+                    corsoSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Errore nel caricamento delle materie:', error);
+                    corsoSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
+                    corsoSelect.disabled = false;
+                });
+        });
     </script>
 </body>
 </html>

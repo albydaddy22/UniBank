@@ -126,7 +126,7 @@ if(!isset($_SESSION['is_logged'])){
                     <p>Condividi le tue dispense e guadagna UniToken. Acquista materiali di qualità dai tuoi colleghi universitari.</p>
                     <div class="btnbox">
                         <?php if($_SESSION['is_logged'] == true) {?>
-                            <a href="">
+                            <a href="upload/uploadmaterial.php">
                                 <button class="startbtn">Carica dispense</button>
                             </a>
                         <?php }
