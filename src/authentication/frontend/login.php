@@ -94,8 +94,56 @@ if($_SESSION['is_logged']) {
             <p class="copyright">© 2026 UniBank™. All rights reserved.</p>
         </footer>
     </div>
+    
+    <!-- Popup overlays for login errors -->
+    <div class="popup-overlay" id="popupInvalidEmail">
+        <div class="popup-box">
+            <h3>Attenzione</h3>
+            <p>Email non valida. Controlla il formato dell'indirizzo.</p>
+            <button class="popup-btn" onclick="closePopup('popupInvalidEmail')">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupPwRequired">
+        <div class="popup-box">
+            <h3>Attenzione</h3>
+            <p>La password è obbligatoria.</p>
+            <button class="popup-btn" onclick="closePopup('popupPwRequired')">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupWrongCreds">
+        <div class="popup-box">
+            <h3>Attenzione</h3>
+            <p>Email o password errate.</p>
+            <button class="popup-btn" onclick="closePopup('popupWrongCreds')">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupBlocked">
+        <div class="popup-box">
+            <h3>Account bloccato</h3>
+            <p>Il tuo account è stato bloccato dall'amministratore. Contatta il supporto per maggiori informazioni.</p>
+            <button class="popup-btn" onclick="closePopup('popupBlocked')">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupGenericError">
+        <div class="popup-box">
+            <h3>Errore</h3>
+            <p>Si è verificato un errore durante il login. Riprova più tardi.</p>
+            <button class="popup-btn" onclick="closePopup('popupGenericError')">Chiudi</button>
+        </div>
+    </div>
 </body>
 <script>
+function openPopup(id){
+    document.getElementById(id)?.classList.add('active');
+}
+function closePopup(id){
+    document.getElementById(id)?.classList.remove('active');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const toggles = document.querySelectorAll('.togglepassword');
     toggles.forEach(toggle => {
@@ -113,6 +161,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    <?php if(isset($_GET['invalid']) && $_GET['invalid'] == '1'): ?>
+    openPopup('popupInvalidEmail');
+    <?php endif; ?>
+
+    <?php if(isset($_GET['pwreq']) && $_GET['pwreq'] == '1'): ?>
+    openPopup('popupPwRequired');
+    <?php endif; ?>
+
+    <?php if(isset($_GET['wrong']) && $_GET['wrong'] == '1'): ?>
+    openPopup('popupWrongCreds');
+    <?php endif; ?>
+
+    <?php if(isset($_GET['blocked']) && $_GET['blocked'] == '1'): ?>
+    openPopup('popupBlocked');
+    <?php endif; ?>
+
+    <?php if(isset($_GET['error']) && $_GET['error'] == '1'): ?>
+    openPopup('popupGenericError');
+    <?php endif; ?>
 });
 </script>
 </html>

@@ -19,15 +19,17 @@ if($password === ''){
 }
 
 if(!empty($errors)){
-    echo '<div style="color:red;">';
-    echo '<p>Errore durante il login:</p>';
-    echo '<ul>';
-    foreach ($errors as $error) {
-        echo '<li>' . htmlspecialchars($error) . '</li>';
+    // Redirect to login with appropriate error flag for popup display
+    if(in_array('Email non valida.', $errors)){
+        header('Location: ../frontend/login.php?invalid=1');
+        exit;
     }
-    echo '</ul>';
-    echo '</div>';
-    echo '<p><a href="../frontend/login.php">Torna al login</a></p>';
+    if(in_array('Password è obbligatoria.', $errors)){
+        header('Location: ../frontend/login.php?pwreq=1');
+        exit;
+    }
+    // Fallback generic error
+    header('Location: ../frontend/login.php?error=1');
     exit;
 }
 
@@ -46,16 +48,14 @@ $user = mysqli_fetch_assoc($result);
 mysqli_stmt_close($stmt);
 
 if(!$user || !password_verify($password, $user['password'])){
-    echo '<p style="color:red;">Email o password errate.</p>';
-    echo '<p><a href="../frontend/login.php">Torna al login</a></p>';
     mysqli_close($connection);
+    header('Location: ../frontend/login.php?wrong=1');
     exit;
 }
 
 if((int)$user['bloccato'] === 1){
-    echo '<p style="color:red;">Il tuo account è stato bloccato dall\'amministratore. Contatta il supporto per maggiori informazioni.</p>';
-    echo '<p><a href="../frontend/login.php">Torna al login</a></p>';
     mysqli_close($connection);
+    header('Location: ../frontend/login.php?blocked=1');
     exit;
 }
 

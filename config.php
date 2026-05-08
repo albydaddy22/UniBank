@@ -2,7 +2,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'unibankdatabase2');
+define('DB_NAME', 'unibankgay');
 
 define('GEMINI_API_KEY', 'inserisci qui la api key che si trova nel file txt');
 

@@ -49,12 +49,50 @@ session_start();
                         </div>
                         <div class="inputbox">
                             <label for="password">Password</label>
-                            <input type="password" name="password" placeholder="●●●●●●●●●" required>
+                            <input type="password" class="pwinput1" name="password" placeholder="●●●●●●●●●" required>
+                            <div class="pwpopup1">
+                                <h4 style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; color: var(--color-yellow-primary); margin-bottom: 15px; font-size: 18px;">
+                                    <img src="../../../assets/warning.png" alt="!" style="width: 20px"> Attenzione</h4>
+                                <p class="infop" style="margin-bottom: 10px">La password che inserisci deve avere le seguenti caratteristiche:</p>
+                                <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+                                    <li class="li"">
+                                    <span style="color: var(--color-yellow-primary)">•</span>
+                                    <p class="infop">Minimo 8 caratteri</p>
+                                    </li>
+                                    <li class="li">
+                                        <span style="color: var(--color-yellow-primary)">•</span>
+                                        <p class="infop">Almeno una lettera maiuscola e una minuscola</p>
+                                    </li>
+                                    <li class="li"">
+                                    <span style="color: var(--color-yellow-primary)">•</span>
+                                    <p class="infop">Almeno un carattere speciale</p>
+                                    </li>
+                                </ul>
+                            </div>
                             <button type="button" class="togglepassword"><img src="../../../assets/showpw.png" alt="Show password"></button>
                         </div>
                         <div class="inputbox">
                             <label for="confermapassword">Conferma Password</label>
-                            <input type="password" name="confermapassword" placeholder="●●●●●●●●●" required>
+                            <input type="password" class="pwinput2" name="confermapassword" placeholder="●●●●●●●●●" required>
+                            <div class="pwpopup2">
+                                <h4 style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; color: var(--color-yellow-primary); margin-bottom: 15px; font-size: 18px;">
+                                    <img src="../../../assets/warning.png" alt="!" style="width: 20px"> Attenzione</h4>
+                                <p class="infop" style="margin-bottom: 10px">La password che inserisci deve avere le seguenti caratteristiche:</p>
+                                <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+                                    <li class="li"">
+                                    <span style="color: var(--color-yellow-primary)">•</span>
+                                    <p class="infop">Minimo 8 caratteri</p>
+                                    </li>
+                                    <li class="li">
+                                        <span style="color: var(--color-yellow-primary)">•</span>
+                                        <p class="infop">Almeno una lettera maiuscola e una minuscola</p>
+                                    </li>
+                                    <li class="li"">
+                                    <span style="color: var(--color-yellow-primary)">•</span>
+                                    <p class="infop">Almeno un carattere speciale</p>
+                                    </li>
+                                </ul>
+                            </div>
                             <button type="button" class="togglepassword"><img src="../../../assets/showpw.png" alt="Show password"></button>
                         </div>
                         <div class="inputbox fullwidth">
@@ -138,10 +176,40 @@ session_start();
             <p class="copyright">© 2026 UniBank™. All rights reserved.</p>
         </footer>
     </div>
+
+    <div class="popup-overlay" id="popupWeakPw">
+        <div class="popup-box">
+            <h3>Attenzione</h3>
+            <p>La password inserita non è sicura. Assicurati che abbia almeno 8 caratteri, includa lettere maiuscole e minuscole, numeri e caratteri speciali.</p>
+            <button class="popup-btn" onclick="closePopupWeakPw()">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popupPwMismatch">
+        <div class="popup-box">
+            <h3>Attenzione</h3>
+            <p>Le password non coincidono. Per favore, assicurati che i due campi password siano identici.</p>
+            <button class="popup-btn" onclick="closePopupPwMismatch()">Chiudi</button>
+        </div>
+    </div>
     
 </body>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+function openPopupWeakPw() {
+    document.getElementById('popupWeakPw').classList.add('active');
+}
+function closePopupWeakPw() {
+    document.getElementById('popupWeakPw').classList.remove('active');
+}
+
+function openPopupPwMismatch() {
+    document.getElementById('popupPwMismatch').classList.add('active');
+}
+function closePopupPwMismatch() {
+    document.getElementById('popupPwMismatch').classList.remove('active');
+}
+
+ document.addEventListener('DOMContentLoaded', function() {
     const toggles = document.querySelectorAll('.togglepassword');
     toggles.forEach(toggle => {
         toggle.addEventListener('click', function() {
@@ -158,6 +226,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    <?php if(isset($_GET['weakpw']) && $_GET['weakpw'] == '1'): ?>
+    openPopupWeakPw();
+    <?php endif; ?>
+
+    <?php if(isset($_GET['pwdmismatch']) && $_GET['pwdmismatch'] == '1'): ?>
+    openPopupPwMismatch();
+    <?php endif; ?>
 });
 </script>
 </html>

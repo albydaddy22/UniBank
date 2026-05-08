@@ -33,10 +33,12 @@ if($password === ''){
     $errors[] = 'Password è obbligatoria.';
 }
 if($password !== $confirmPassword){
-    $errors[] = 'Le password non coincidono.';
+    header('Location: ../frontend/signup.php?pwdmismatch=1');
+    exit;
 }else{
     if(!passwordSicura($password)){
-        $errors[] = 'la password inserita non e sicura';
+        header('Location: ../frontend/signup.php?weakpw=1');
+        exit;
     }
 }
 if(!ctype_digit($universita) || !ctype_digit($facolta)){
