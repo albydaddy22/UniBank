@@ -250,6 +250,15 @@ $conn = db_connect();
                 </div>
             </div>
         </section>
+
+        <section class="pfupload">
+            <div style="display: flex; flex-direction: column; gap: 5px">
+                <h3>Carica una nuova dispensa</h3>
+                <p class="infop">Carica e rendi pubblico i tuoi materiali per guadagnare UniToken</p>
+            </div>
+            <a style="text-decoration: none" href="../upload/uploadmaterial.php"><button class="pfuploadbtn"><img src="../../assets/upload.png" alt="+">Carica ora</button></a>
+        </section>
+
         <div class="pfcolumn">
                 <h4>Chi ha acquistato le tue dispense</h4>
                 <div class="pfbox">

@@ -401,6 +401,52 @@ body {
     font-size: 14px;
 }
 
+.pfupload {
+    width: 100%;
+    height: 70px;
+    background-color: var(--color-blue-background);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.pfuploadbtn {
+    color: var(--color-blue-background);
+    background-color: var(--color-yellow-primary);
+    border-radius: 8px;
+    height: 40px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 750;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.pfupload h3{
+    color: var(--color-grey-background);
+}
+
+.pfuploadbtn:hover {
+    background-color: var(--color-yellow-secondary);
+    border-radius: 15px;
+}
+
+.pfuploadbtn img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.infop {
+    color: var(--color-grey-foreground);
+    font-size: 13px;
+}
+
 .pricebadge {
     display: inline-flex;
     align-items: center;
