@@ -55,7 +55,7 @@ session_start();
                                     <img src="../../../assets/warning.png" alt="!" style="width: 20px"> Attenzione</h4>
                                 <p class="infop" style="margin-bottom: 10px">La password che inserisci deve avere le seguenti caratteristiche:</p>
                                 <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-                                    <li class="li"">
+                                    <li class="li">
                                     <span style="color: var(--color-yellow-primary)">•</span>
                                     <p class="infop">Minimo 8 caratteri</p>
                                     </li>
@@ -63,9 +63,13 @@ session_start();
                                         <span style="color: var(--color-yellow-primary)">•</span>
                                         <p class="infop">Almeno una lettera maiuscola e una minuscola</p>
                                     </li>
-                                    <li class="li"">
-                                    <span style="color: var(--color-yellow-primary)">•</span>
-                                    <p class="infop">Almeno un carattere speciale</p>
+                                    <li class="li">
+                                        <span style="color: var(--color-yellow-primary)">•</span>
+                                        <p class="infop">Almeno un carattere speciale</p>
+                                    </li>
+                                    <li class="li">
+                                        <span style="color: var(--color-yellow-primary)">•</span>
+                                        <p class="infop">Minimo un numero</p>
                                     </li>
                                 </ul>
                             </div>
@@ -90,6 +94,10 @@ session_start();
                                     <li class="li"">
                                     <span style="color: var(--color-yellow-primary)">•</span>
                                     <p class="infop">Almeno un carattere speciale</p>
+                                    </li>
+                                    <li class="li">
+                                        <span style="color: var(--color-yellow-primary)">•</span>
+                                        <p class="infop">Minimo un numero</p>
                                     </li>
                                 </ul>
                             </div>
