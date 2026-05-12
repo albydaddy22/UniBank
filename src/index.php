@@ -61,7 +61,7 @@ if(!isset($_SESSION['is_logged'])){
                         <a href="" class="listelement">Sfoglia</a>
                     </li>
                     <li>
-                        <a href="" class="listelement">Contattaci</a>
+                        <a href="contactus/contactus.php" class="listelement">Contattaci</a>
                     </li>
                     <?php
                     if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] != true){ ?>
@@ -227,7 +227,7 @@ if(!isset($_SESSION['is_logged'])){
             </div>
             <div class="ftcolumn">
                 <h2>Manca la tua università o la tua facoltà?</h2>
-                <a href="#"><button class="contactbtn">Contattaci</button></a>
+                <a href="contactus/contactus.php"><button class="contactbtn">Contattaci</button></a>
             </div>
         </div>
         <p class="copyright">© 2026 UniBank™. All rights reserved.</p>

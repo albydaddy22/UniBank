@@ -83,6 +83,22 @@ $conn = db_connect();
 
 <main class="profilepage">
     <div class="pfcontainer">
+        <?php if(isset($_SESSION['upload_success'])): ?>
+                <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px;">
+                    <?php
+                        echo $_SESSION['upload_success']; 
+                        unset($_SESSION['upload_success']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            <?php if(isset($_SESSION['upload_error'])): ?>
+                <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px;">
+                    <?php 
+                        echo $_SESSION['upload_error']; 
+                        unset($_SESSION['upload_error']);
+                    ?>
+                </div>
+            <?php endif; ?>
         <section class="pfheadercard">
             <div class="pfuser">
                 <div class="pfavatar">
@@ -117,7 +133,7 @@ $conn = db_connect();
                 <a href="../funzioniUtenti/modificaProfiloUtente.php"><button class="editbtn">✎ Modifica profilo</button></a>
             </div>
         </section>
-
+        
         <section class="pfstats">
             <div class="statcard">
                 <span class="statlabel">Dispense caricate</span>
@@ -250,7 +266,6 @@ $conn = db_connect();
                 </div>
             </div>
         </section>
-
         <section class="pfupload">
             <div style="display: flex; flex-direction: column; gap: 5px">
                 <h3>Carica una nuova dispensa</h3>

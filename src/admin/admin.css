@@ -181,7 +181,6 @@ body {
     font-size: 14px;
 }
 
-/* Admin Specific */
 .admin-page {
     padding-top: 70px;
     width: 100%;
@@ -232,7 +231,7 @@ body {
 }
 
 .admin-container {
-    max-width: 1200px;
+    max-width: fit-content;
     margin: 30px auto;
     padding: 0 30px;
     display: flex;
@@ -306,7 +305,7 @@ body {
 }
 
 .admin-table {
-    width: 100%;
+    width: fit-content;
     border-collapse: collapse;
 }
 
@@ -699,6 +698,7 @@ body {
         transform: translateY(-30px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;

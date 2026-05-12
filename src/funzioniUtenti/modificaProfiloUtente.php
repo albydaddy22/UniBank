@@ -29,6 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $success_msg = "Utente aggiornato con successo!";
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
+        $_SESSION['id_facolta'] = $id_facolta;
         
         $q_nomi = "SELECT u.nome AS nome_universita, f.nome AS nome_facolta FROM universita u, facolta f WHERE u.id_universita = $id_universita AND f.id_facolta = $id_facolta";
         $ris_nomi = mysqli_query($conn, $q_nomi);

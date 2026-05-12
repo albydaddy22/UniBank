@@ -19,7 +19,6 @@ if($password === ''){
 }
 
 if(!empty($errors)){
-    // Redirect to login with appropriate error flag for popup display
     if(in_array('Email non valida.', $errors)){
         header('Location: ../frontend/login.php?invalid=1');
         exit;
@@ -28,7 +27,6 @@ if(!empty($errors)){
         header('Location: ../frontend/login.php?pwreq=1');
         exit;
     }
-    // Fallback generic error
     header('Location: ../frontend/login.php?error=1');
     exit;
 }
@@ -66,7 +64,7 @@ $_SESSION['email'] = $user['email'];
 $_SESSION['is_logged'] = true;
 
 $query = "
-    SELECT u.nome AS nome_universita, f.nome AS nome_facolta
+    SELECT u.nome AS nome_universita, f.nome AS nome_facolta, ut.id_facolta
     FROM universita u, facolta f, utenti ut
     WHERE ut.id_universita = u.id_universita
     AND ut.id_facolta = f.id_facolta
@@ -78,7 +76,7 @@ $record = mysqli_fetch_assoc($ris);
 
 $_SESSION['universita'] = $record['nome_universita'];
 $_SESSION['facolta'] = $record['nome_facolta'];
-
+$_SESSION['id_facolta'] = $record['id_facolta']; 
 
 mysqli_close($connection);
 

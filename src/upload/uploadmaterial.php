@@ -83,22 +83,6 @@ $conn = db_connect();
     <div class="container">
         <div style="display: flex; flex-direction: column; gap: 10px; text-align: left; width: 100%">
             <h1 style="color: var(--color-blue-background)">Carica Dispensa</h1>
-            <?php if(isset($_SESSION['upload_success'])): ?>
-                <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                    <?php 
-                        echo $_SESSION['upload_success']; 
-                        unset($_SESSION['upload_success']);
-                    ?>
-                </div>
-            <?php endif; ?>
-            <?php if(isset($_SESSION['upload_error'])): ?>
-                <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                    <?php 
-                        echo $_SESSION['upload_error']; 
-                        unset($_SESSION['upload_error']);
-                    ?>
-                </div>
-            <?php endif; ?>
             <div class="content">
                 <div class="uploadbox">
                     <form action="funzioniUpload/elaborazioneUpload.php" method="post" enctype="multipart/form-data">
@@ -112,47 +96,24 @@ $conn = db_connect();
                                 <textarea class="description" name="descrizione" cols="30" rows="8" placeholder="Descrivi il contenuto..." required></textarea>
                             </div>
                             <div class="inputbox">
-                                <label for="universita">Università</label>
-                                <select name="universita" required>
-                                    <option value="">Seleziona università</option>
-                                    <?php
-                                    require_once __DIR__ . '/../../config.php';
-                                    $conn = db_connect();
-
-                                    $query = "SELECT * FROM universita";
-                                    $ris = mysqli_query($conn, $query);
-                                    while($row = mysqli_fetch_assoc($ris)){
-                                        $id = $row['id_universita'];
-                                        $nomeUniversita = $row['nome'];
-                                        $cittaSede = $row['citta_sede'];
-                                        echo "<option value=\"$id\">$cittaSede - $nomeUniversita</option>";
-                                    }
-                                    mysqli_close($conn);
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="inputbox">
-                                <label for="facolta">Facoltà</label>
-                                <select name="facolta" id="facolta" required>
-                                    <option value="">Seleziona facoltà</option>
-                                    <?php
-                                    require_once __DIR__ . '/../../config.php';
-                                    $conn = db_connect();
-                                    $query = "SELECT * FROM facolta";
-                                    $ris = mysqli_query($conn, $query);
-                                    while($row = mysqli_fetch_assoc($ris)){
-                                        $id = $row['id_facolta'];
-                                        $nomeFacolta = $row['nome'];
-                                        echo "<option value=\"$id\">$nomeFacolta</option>";
-                                    }
-                                    mysqli_close($conn);
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="inputbox">
                                 <label for="corso">Corso/Materia</label>
                                 <select name="corso" id="corso" required>
-                                    <option value="">Prima seleziona una facoltà</option>
+                                    <option value="">Seleziona materia</option>
+                                    <?php
+                                        $id_facolta_utente = $_SESSION['id_facolta'];
+
+                                        $query = "
+                                            SELECT m.id_materia, m.nome
+                                            FROM materia m, materiaperfacolta mpf
+                                            WHERE m.id_materia = mpf.id_materia
+                                            AND mpf.id_facolta = '$id_facolta_utente'
+                                            ORDER BY m.nome ASC
+                                        ";
+                                        $ris = mysqli_query($conn, $query);
+                                        while($record = mysqli_fetch_assoc($ris)){
+                                            echo '<option value="'.$record['id_materia'].'">'.$record['nome'].'</option>';
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="inputbox">
@@ -263,40 +224,6 @@ $conn = db_connect();
                 }
             }
         }, false);
-
-        const facoltaSelect = document.getElementById('facolta');
-        const corsoSelect = document.getElementById('corso');
-
-        facoltaSelect.addEventListener('change', function(){
-            const idFacolta = this.value;
-
-            corsoSelect.innerHTML = '<option value="">Caricamento...</option>';
-            corsoSelect.disabled = true;
-
-            if(!idFacolta){
-                corsoSelect.innerHTML = '<option value="">Prima seleziona una facoltà</option>';
-                corsoSelect.disabled = false;
-                return;
-            }
-
-            fetch('funzioniUpload/getMaterie.php?id_facolta=' + encodeURIComponent(idFacolta))
-                .then(response => response.json())
-                .then(materie => {
-                    corsoSelect.innerHTML = '<option value="">Seleziona materia</option>';
-                    materie.forEach(m => {
-                        const option = document.createElement('option');
-                        option.value = m.id;
-                        option.textContent = m.nome;
-                        corsoSelect.appendChild(option);
-                    });
-                    corsoSelect.disabled = false;
-                })
-                .catch(error => {
-                    console.error('Errore nel caricamento delle materie:', error);
-                    corsoSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
-                    corsoSelect.disabled = false;
-                });
-        });
     </script>
 </body>
 </html>
